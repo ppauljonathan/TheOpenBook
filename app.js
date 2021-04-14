@@ -3,7 +3,7 @@ const app=express();
 require('dotenv').config();
 
 const routes=require('./routes/routes');
-const e404=require('./controllers/404');
+const errorHandlers=require('./controllers/errors');
 
 
 app.use(express.static('public'));
@@ -14,14 +14,10 @@ app.set('views','./views');
 
 app.use(routes);
 
-app.use(e404.get404);
+app.use(errorHandlers.get404);
 
-app.use((err,req,res,next)=>{
-    console.log(err);
-    res.status(500);
-    res.send('internal server error');
-})
+app.use(errorHandlers.get500);
 
-app.listen(process.env.PORT,()=>{
-    console.log(`listening at http://localhost:${process.env.PORT}`);
+app.listen(process.env.PORT||3000,()=>{
+    console.log(`listening at http://localhost:${process.env.PORT||3000}`);
 });

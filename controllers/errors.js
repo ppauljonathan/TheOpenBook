@@ -4,3 +4,10 @@ module.exports.get404=(req,res,next)=>{
         title:'Page Not Found'
     })
 }
+
+module.exports.get500=(err,req,res,next)=>{
+    res.status(500);
+    res.render('500',{
+        message:err
+    })
+}
