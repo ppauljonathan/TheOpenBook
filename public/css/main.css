@@ -1,5 +1,52 @@
+:root{
+    --width-to-nav:4vw;
+    --width-to-nav-neg:96vw;
+    --height-of-header:8vh;
+    --height-of-header-neg:92vh
+}
+
 *{
     margin: unset;
     color: white;
     background-color: black;
+}
+
+.header{
+    background-color: #222;
+    position: absolute;
+    top:0%;
+    left: 0%;
+    width: 100vw;
+    height: var(--height-of-header);
+}
+
+.nav{
+    background-color: #222;
+    position: absolute;
+    top:var(--height-of-header);
+    left: 0%;
+    width: var(--width-to-nav);
+    height: var(--height-of-header-neg);
+}
+
+.main{
+    background-color: #000;
+    position: absolute;
+    top: var(--height-of-header);
+    left: var(--width-to-nav);
+    width: var(--width-to-nav-neg);
+    height: var(--height-of-header-neg);
+}
+
+.header p{
+    font-size: 6vh;
+    background-color: inherit;
+    width: fit-content;
+}
+
+.centered{
+    position: relative;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
