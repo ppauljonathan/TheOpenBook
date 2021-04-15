@@ -11,7 +11,7 @@
 .header{
     height:8vh;
     background-color:#333;
-    z-index:1;
+    z-index:2;
     display:flex;
     font-size:6vh;
 }
@@ -22,6 +22,7 @@
     z-index:inherit;
     background-color:inherit;
     text-align:center;
+    user-select: none;
 }
 
 .header .two{
@@ -32,7 +33,7 @@
 }
 
 .main{
-    padding-top:9vh;
+    padding-top:10vh;
     padding-left:2vw;
     height:fit-content;
     width:fit-content;
@@ -42,4 +43,23 @@
     position: relative;
     width: fit-content;
     height: fit-content;
+}
+
+.nav{
+    background-color: #000;
+    width:0vw;
+    height:100vh;
+    transition:0.5s;
+    z-index:1;
+    opacity:0.9;
+}
+
+.nav-content{
+    z-index: 2;
+    width: inherit;
+    height: 50vh;
+    position: relative;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
