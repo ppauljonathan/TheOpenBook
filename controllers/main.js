@@ -1,9 +1,18 @@
 const Post=require('../models/post');
 
 module.exports.main=(req,res,next)=>{
-    res.render('index',{
-        title:'TheOpenBook'
-    });
+    Post
+    .find()
+    .then(data=>{
+        res.render('index',
+        {
+            title:'TheOpenBook',
+            posts:data
+        })
+    })
+    .catch(err=>{
+        next(err);
+    })
 }
 
 module.exports.getCreate=(req,res,next)=>{
@@ -21,7 +30,6 @@ module.exports.postCreate=(req,res,next)=>{
 
     Post.create(post)
     .then(result=>{
-        console.log(result);
         res.redirect('/');
     })
     .catch(err=>{

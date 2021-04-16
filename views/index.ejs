@@ -2,16 +2,15 @@
 <%-include('./includes/header')%>
 <%-include('./includes/navbar',{title:title})%>
     <main class="main">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem laudantium dicta sunt accusamus adipisci, quasi nam deserunt nemo asperiores accusantium officia ex quidem perferendis odio inventore in corrupti quae? Velit.
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, esse, ut in iure minus aspernatur magni fugiat fugit incidunt praesentium, facere accusamus! Laboriosam ab repellat nemo magni unde, harum distinctio.
-        Minima dolores atque magni soluta ea quod sit temporibus doloremque debitis, numquam officia. Quas error dolorum omnis at consequuntur labore quisquam, voluptates quis architecto accusamus, quasi assumenda! Debitis, ex! Similique.
-        Assumenda modi nulla tempore obcaecati? Ut voluptatibus, veritatis cum, aperiam corporis mollitia consequuntur earum iure ab reprehenderit natus facere maiores est atque exercitationem officiis aliquid, quidem quisquam quod aspernatur quibusdam.
-        Beatae accusamus eum aspernatur soluta, dolore, maxime natus nobis ipsam illum reiciendis perferendis labore voluptatibus hic distinctio reprehenderit velit modi harum dolor excepturi odit impedit? Repudiandae unde perspiciatis magnam voluptatum.
-        Voluptatum tenetur, odio enim quibusdam qui laboriosam sit sed architecto earum nam ipsum exercitationem accusamus cumque eos unde minima! Aspernatur accusantium, dolores a eius dolorem animi esse corrupti harum ipsa.
-        Dolores dignissimos reprehenderit dicta. Velit exercitationem, laborum nemo explicabo excepturi nulla beatae quisquam fuga, enim ea iure similique illum non amet illo at. Esse a aut repellat optio sequi adipisci.
-        Impedit eius perferendis eos numquam aliquid aliquam iusto dolores autem odio! Vero minus sunt dignissimos. Obcaecati quod pariatur ipsum minima similique nemo autem, harum cupiditate, delectus facilis consequuntur eum dolorum!
-        Corrupti iste veniam tempore nobis beatae sunt, dolorum exercitationem odio est voluptatem fugiat, nemo error architecto, enim laborum blanditiis obcaecati incidunt fugit. Quisquam veniam error maiores tenetur, corporis voluptas eos!
-        Omnis nisi ut corrupti dignissimos dolorem facere, tenetur libero laudantium et sed impedit quaerat quod molestias odio praesentium eligendi officia consequuntur corporis cumque non adipisci expedita tempore illo cupiditate? Repellat!
-        Obcaecati modi laborum fuga eveniet sunt hic beatae ut maiores saepe commodi nihil odio sint repellendus possimus id dolorum perspiciatis deserunt deleniti, aliquam cupiditate doloribus qui rerum vel harum! Repellendus.
+        <%if(posts.length>0){%>
+            <%for(let i=0;i<posts.length;i++){%>
+                <div class="post-wrapper">
+                    <h1 class="post-content"><%=posts[i].heading%></h1>
+                    <p class="post-authour"><%=posts[i].creator.name%></p>
+                </div>
+            <%}%>
+        <%}else{%>
+            <h1>NO POSTS FOUND</h1>    
+        <%}%>
     </main>
 <%-include('./includes/tail')%>
