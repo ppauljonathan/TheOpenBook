@@ -5,6 +5,7 @@ require('dotenv').config();
 const routes=require('./routes/routes');
 const errorHandlers=require('./controllers/errors');
 
+app.use(express.urlencoded({extended:true}));
 
 app.use(express.static('public'));
 
