@@ -1,0 +1,25 @@
+.post-wrapper{
+    position: relative;
+    border: 2px solid white;
+    width: 75%;
+    height: 25%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.post-heading{
+    position: relative;
+    height: 30%;
+    width: fit-content;
+    margin: auto;
+}
+
+.post-authour{
+    position: relative;
+    height: 20%;
+    width: fit-content;
+    float: right;
+    margin-right: 5%;
+}
