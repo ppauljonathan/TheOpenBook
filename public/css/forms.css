@@ -1,0 +1,66 @@
+.form{
+    width: 75%;
+    height: 95%;
+    position: relative;
+    border: 2px solid white;
+    border-radius: 10px;
+    font-size: 4vh;
+}
+
+.heading{
+    position: relative;
+    background-color: rgb(122, 122, 122);
+    font-size: 0.7cm;
+    top:8%;left: 5%;
+    width: 30%;
+    height: 5%;
+    padding: 1%;
+}
+
+.heading-label{
+    position: relative;
+    top: 2%;left: 15%;
+    width: fit-content;
+    height: fit-content;
+}
+
+.content{
+    position: relative;
+    background-color: rgb(122, 122, 122);
+    top:20%;left: 10%;
+    margin: auto;
+    font-size: 0.7cm;
+    width: 70%;
+    height: 55%;
+    padding: 1%;   
+    resize: none;
+}
+
+.content-label{
+    position: relative;
+    top: 20%;left: -5%;
+    width: fit-content;
+    height: fit-content;
+}
+
+.button{
+    border: 2px solid white;
+    border-radius: 5px;
+    padding: 3px;
+    width: fit-content;
+    height: fit-content;
+    font-size: 0.6cm;
+}
+
+.submit,.reset{
+    position: relative;
+    bottom: -25%;
+}
+
+.submit{
+    left: -70%;
+}
+
+.reset{
+    left: 2%;
+}

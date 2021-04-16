@@ -1,0 +1,14 @@
+<%-include('./includes/head',{title:title})%>
+<%-include('./includes/header')%>
+<%-include('./includes/navbar')%>
+<main class="main">
+    <form action="/create" method="post" class="form centered">
+        <label for="heading" class="heading-label">Title</label>
+        <input type="text" name="heading" class="heading">
+        <label for="content" class="content-label">Content</label>
+        <textarea name="content" cols="30" rows="10" class="content"></textarea>
+        <button type="reset" class="button reset">reset</button>
+        <button type="submit" class="button submit">submit</button>
+    </form>
+</main>
+<%-include('./includes/tail')%>

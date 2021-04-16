@@ -8,6 +8,11 @@
     position:absolute;
 }
 
+.centered{
+    top:50%;left:50%;
+    transform: translate(-50%,-50%);
+}
+
 .header{
     user-select: none;
     height:8vh;
