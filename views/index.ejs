@@ -9,17 +9,15 @@
                     <p class="post-authour"><%=posts[i].creator.name%></p>
                 </div>
             <%}%>
+            <%if(currPage!=firstPage){%>
+                <a class="button prev-page" href="/?page=<%=parseInt(currPage)-1%>">prev</a>
+            <%}%>
+            <p class="page-indicator">Page : <%=currPage%>/<%=lastPage%></p>
+            <%if(currPage!=lastPage){%>
+                <a class="button next-page" href="/?page=<%=parseInt(currPage)+1%>">next</a>
+            <%}%>
         <%}else{%>
             <h1>NO POSTS FOUND</h1>    
-        <%}%>
-        <%if(currPage!=firstPage){%>
-            <a class="button prev-page" href="/?page=<%=parseInt(currPage)-1%>">prev</a>
-        <%}%>
-        <p class="page-indicator">Page : <%=currPage%>/<%=lastPage%></p>
-        <%if(currPage!=lastPage){%>
-            <a class="button next-page" href="/?page=<%=parseInt(currPage)+1%>">next</a>
-        <%}%>
-        
-
+        <%}%>   
     </main>
 <%-include('./includes/tail')%>

@@ -4,6 +4,7 @@ require('dotenv').config();
 const mongoose=require('mongoose');
 
 const routes=require('./routes/routes');
+const authRoutes=require('./routes/auth');
 const errorHandlers=require('./controllers/errors');
 
 const MONGO_URI=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@theopenbook.q3gox.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
@@ -13,7 +14,9 @@ app.use(express.urlencoded({extended:true}));
 app.use((req,res,next)=>{
     const user={
         id:9919103121,
-        name:'P Paul Jonathan'
+        userName:'P Paul Jonathan',
+        email:'test@test.com',
+        password:'wefrwedf'
     }
     req.user=user;
     next();
@@ -26,6 +29,7 @@ app.set('view engine','ejs');
 app.set('views','./views');
 
 app.use(routes);
+app.use(authRoutes);
 
 app.use(errorHandlers.get404);
 
