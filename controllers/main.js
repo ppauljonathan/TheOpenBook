@@ -1,18 +1,32 @@
 const Post=require('../models/post');
 
+const ITEMS_PER_PAGE=3;
+
 module.exports.main=(req,res,next)=>{
-    Post
-    .find()
+    const pageNo=req.query.page||1;
+    let totalPage;
+    Post.countDocuments()
+    .then(num=>{
+        totalPage=Math.ceil(num/ITEMS_PER_PAGE);
+        return Post
+        .find()
+        .sort({_id:-1})
+        .skip((pageNo-1)*ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
+    })
     .then(data=>{
         res.render('index',
         {
             title:'TheOpenBook',
-            posts:data
+            posts:data,
+            currPage:pageNo,
+            firstPage:1,
+            lastPage:totalPage
         })
     })
     .catch(err=>{
         next(err);
-    })
+    });
 }
 
 module.exports.getCreate=(req,res,next)=>{

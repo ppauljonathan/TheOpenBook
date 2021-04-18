@@ -23,3 +23,21 @@
     float: right;
     margin-right: 5%;
 }
+
+.prev-page{
+    position: absolute;
+    bottom: 5%;
+    left: 15%;
+}
+
+.next-page{
+    position: absolute;
+    bottom: 5%;
+    right: 15%;
+}
+
+.page-indicator{
+    position: relative;
+    bottom: -5%;
+    margin: auto;
+}
