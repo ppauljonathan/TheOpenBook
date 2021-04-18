@@ -6,6 +6,13 @@
     width:100vw;
     height:100vh;
     position:absolute;
+    text-decoration: none;
+}
+
+body{
+    background-color: #000;
+    height: 100vh;
+    width: 100vw;
 }
 
 .centered{
@@ -25,7 +32,8 @@
 .main{
     padding-top:14vh;
     padding-left:2vw;
-    height:86vh;
+    padding-bottom: 2vw;
+    height:fit-content;
     width:98vw;
 }
 

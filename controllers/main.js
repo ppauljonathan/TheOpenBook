@@ -50,3 +50,18 @@ module.exports.postCreate=(req,res,next)=>{
         next(err);
     })
 }
+
+module.exports.getSinglePost=(req,res,next)=>{
+    const postId=req.params.postId;
+    Post
+    .findById(postId)
+    .then(post=>{
+        res.render('singlePost',{
+            title:'Reading Mode',
+            post:post
+        })
+    })
+    .catch(err=>{
+        next(err);
+    });
+}

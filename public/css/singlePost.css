@@ -1,0 +1,23 @@
+.wrapper{
+    position: relative;
+    width: 90%;height: fit-content;
+    margin: auto;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.heading{
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    padding: 2rem;
+    font-size: 6vh;
+}
+
+.content{
+    position: relative;
+    width: 90%;
+    height: fit-content;
+    padding: 2rem;
+    font-size: 4vh;
+}

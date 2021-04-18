@@ -1,8 +1,8 @@
 .post-wrapper{
     position: relative;
     border: 2px solid white;
-    width: 75%;
-    height: 25%;
+    width: 75vw;
+    height: 20vh;
     margin: auto;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -11,9 +11,11 @@
 
 .post-heading{
     position: relative;
+    left:3%;
     height: 30%;
+    color: white;
+    font-size: 250%;
     width: fit-content;
-    margin: auto;
 }
 
 .post-authour{
@@ -26,13 +28,13 @@
 
 .prev-page{
     position: absolute;
-    bottom: 5%;
+    bottom: 0%;
     left: 15%;
 }
 
 .next-page{
     position: absolute;
-    bottom: 5%;
+    bottom: 0%;
     right: 15%;
 }
 

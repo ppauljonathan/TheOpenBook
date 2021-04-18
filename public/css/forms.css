@@ -1,57 +1,51 @@
 .form{
-    width: 75%;
-    height: 95%;
-    position: relative;
+    top:40vh;
+    left: 50%;
+    width: 85vw;
+    height: 75vh;
     border: 2px solid white;
-    border-radius: 10px;
-    font-size: 4vh;
 }
 
 .heading{
-    position: relative;
-    background-color: rgb(122, 122, 122);
-    font-size: 0.7cm;
-    top:8%;left: 5%;
-    width: 30%;
-    height: 5%;
-    padding: 1%;
+    width: 40vw;
+    height: 4vh;
+    top:15%;
+    left: 5%;
+    font-size: 4vh;
 }
 
 .heading-label{
-    position: relative;
-    top: 2%;left: 15%;
     width: fit-content;
     height: fit-content;
+    top:5%;
+    left:5%;
+    font-size: 4vh;
 }
 
 .content{
-    position: relative;
-    background-color: rgb(122, 122, 122);
-    top:20%;left: 10%;
-    margin: auto;
-    font-size: 0.7cm;
-    width: 70%;
-    height: 55%;
-    padding: 1%;   
+    top:40%;
+    left:5%;
+    width: 90%;
+    height: 40%;
     resize: none;
+    font-size: 4vh;
 }
 
 .content-label{
-    position: relative;
-    top: 20%;left: -5%;
     width: fit-content;
     height: fit-content;
+    top:30%;
+    left: 5%;
+    font-size: 4vh;
 }
 
-.submit,.reset{
-    position: relative;
-    bottom: -25%;
-}
 
 .submit{
-    left: -70%;
+    top:90%;
+    left: 5%;
 }
 
 .reset{
-    left: 2%;
+    top:90%;
+    right: 5%;
 }
