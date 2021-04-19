@@ -2,6 +2,16 @@
 <%-include('../includes/header')%>
 <%-include('../includes/navbar')%>
 <main class="main">
-    <h1>Login</h1>
+    <form class="centered signup"action="/login" method="post">
+
+        <label class="email-label" for="emailOrUsername">E-mail or Username</label>
+        <input name="emailOrUsername" class="signup-email"type="text">
+
+        <label class="password-label" for="password">Password</label>
+        <input name="password" class="signup-password" type="password">
+
+        <button class="button" type="submit">Login</button>
+    </form>
+    <p class="already-not-message">Not a member? &nbsp;<a href="/signup">Signup</a></p>
 </main>
 <%-include('../includes/tail')%>

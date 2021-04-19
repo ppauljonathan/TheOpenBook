@@ -49,3 +49,93 @@
     top:90%;
     right: 5%;
 }
+
+.signup{
+    top: 40vh;
+    left: 50vw;
+    width: 80vw;
+    height: 60vh;
+    border: 2px solid white;
+}
+
+.signup .button{
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+}
+
+.email-label{
+    font-size: 3vh;
+    width: fit-content;
+    height: fit-content;
+    top:4%;
+    left: 5%;
+}
+
+.signup-email{
+    font-size: 3vh;
+    height: 4vh;
+    width: 90%;
+    top:10%;
+    left: 5%;
+}
+
+.username-label{
+    font-size: 3vh;
+    width: fit-content;
+    height: fit-content;
+    top:20%;
+    left: 5%;
+}
+
+.signup-username{
+    font-size: 3vh;
+    height: 4vh;
+    width: 90%;
+    top:27%;
+    left: 5%;   
+}
+
+.password-label{
+    font-size: 3vh;
+    width: fit-content;
+    height: fit-content;
+    top:37%;
+    left: 5%;
+}
+
+.signup-password{
+    font-size: 3vh;
+    height: 4vh;
+    width: 90%;
+    top:44%;
+    left: 5%;   
+}
+
+.confirm-password-label{
+    font-size: 3vh;
+    width: fit-content;
+    height: fit-content;
+    top:55%;
+    left: 5%;
+}
+
+.signup-password-confirm{
+    font-size: 3vh;
+    height: 4vh;
+    width: 90%;
+    top:62%;
+    left: 5%;  
+}
+
+.already-not-message{
+    top: 80%;
+    margin:auto;
+    width: fit-content;
+    height: fit-content;
+}
+
+.already-not-message a{
+    width: fit-content;
+    height: fit-content;
+}
