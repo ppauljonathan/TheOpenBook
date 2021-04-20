@@ -41,7 +41,10 @@ mongoose.connect(
         useNewUrlParser:true,
         useUnifiedTopology:true
     }
-);
+)
+.catch(err=>{
+    next(err);
+});
 
 app.listen(process.env.PORT||3000,()=>{
     console.log(`listening at http://localhost:${process.env.PORT||3000}`);
