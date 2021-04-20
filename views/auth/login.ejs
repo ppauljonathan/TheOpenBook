@@ -13,5 +13,8 @@
         <button class="button" type="submit">Login</button>
     </form>
     <p class="already-not-message">Not a member? &nbsp;<a href="/signup">Signup</a></p>
+    <%if(errors.length!=0){%>
+        <p class="errorMsg">ERR:&nbsp;<%=errors[0].msg%></p>
+    <%}%>
 </main>
 <%-include('../includes/tail')%>

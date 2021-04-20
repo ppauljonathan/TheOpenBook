@@ -11,17 +11,6 @@ const MONGO_URI=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD
 
 app.use(express.urlencoded({extended:true}));
 
-app.use((req,res,next)=>{
-    const user={
-        id:9919103121,
-        userName:'P Paul Jonathan',
-        email:'test@test.com',
-        password:'wefrwedf'
-    }
-    req.user=user;
-    next();
-});
-
 app.use(express.static('public'));
 
 app.set('view engine','ejs');
@@ -30,6 +19,11 @@ app.set('views','./views');
 
 app.use(routes);
 app.use(authRoutes);
+
+app.use((req,res,next)=>{
+    req.user=ObjectId("607e5cbe3571dc31f89275ec")
+    next();
+})
 
 app.use(errorHandlers.get404);
 

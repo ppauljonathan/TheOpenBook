@@ -6,7 +6,7 @@
             <%for(let i=0;i<posts.length;i++){%>
                 <div class="post-wrapper">
                     <a href="/post/<%=posts[i]._id%>" class="post-heading" ><%=posts[i].heading%></a>
-                    <p class="post-authour"><%=posts[i].creator.name%></p>
+                    <p class="post-authour"><%=posts[i].creator.username%></p>
                 </div>
             <%}%>
             <%if(currPage!=firstPage){%>

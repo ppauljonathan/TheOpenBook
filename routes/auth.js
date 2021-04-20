@@ -1,13 +1,16 @@
 const router=require('express').Router();
 const {body}=require('express-validator');
-
-const User=require('../models/user');
-
 const authControllers=require('../controllers/auth');
 
 router.get('/login',authControllers.getLogin);
 router.post(
     '/login',
+    [
+        body('emailOrUsername')
+        .trim(),
+        body('password')
+        .trim()    
+    ],
     authControllers.postLogin
 );
 

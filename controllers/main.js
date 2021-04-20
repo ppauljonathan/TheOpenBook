@@ -39,7 +39,7 @@ module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.user
+        creator:ObjectId("607e5cbe3571dc31f89275ec"),
     }
 
     Post.create(post)
