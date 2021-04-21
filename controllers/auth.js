@@ -13,7 +13,8 @@ module.exports.getLogin=(req,res,next)=>{
             .clearCookie("session")
             .render('auth/login',{
                 title:'Login',
-                errors:[]
+                errors:[],
+                isLoggedIn:req.isLoggedIn
             })
         })
         .catch(err=>{
@@ -25,7 +26,8 @@ module.exports.getLogin=(req,res,next)=>{
         .clearCookie("session")
         .render('auth/login',{
             title:'Login',
-            errors:[]
+            errors:[],
+            isLoggedIn:req.isLoggedIn
         })
     }
 }
@@ -52,7 +54,8 @@ module.exports.postLogin=(req,res,next)=>{
             return res
             .render('auth/login',{
                 title:'Login',
-                errors:[{msg:'email/username incorrect'}]
+                errors:[{msg:'email/username incorrect'}],
+                isLoggedIn:req.isLoggedIn
             })
         }
         else{
@@ -87,7 +90,8 @@ module.exports.postLogin=(req,res,next)=>{
             return res
             .render('auth/login',{
                 title:'Login',
-                errors:[{msg:'Password Incorrect'}]
+                errors:[{msg:'Password Incorrect'}],
+                isLoggedIn:req.isLoggedIn
             })
         }
     })
@@ -106,7 +110,8 @@ module.exports.postLogin=(req,res,next)=>{
 module.exports.getSignup=(req,res,next)=>{
     res.render('auth/signup',{
         title:'Signup',
-        errors:[]
+        errors:[],
+        isLoggedIn:req.isLoggedIn
     })
 }
 
@@ -115,7 +120,8 @@ module.exports.postSignup=(req,res,next)=>{
     if (!errors.isEmpty()){
         return res.render('auth/signup',{
             title:'Signup',
-            errors:errors.array({onlyFirstError:true})
+            errors:errors.array({onlyFirstError:true}),
+            isLoggedIn:req.isLoggedIn
         })
     }
     const email=req.body.email;
@@ -127,7 +133,8 @@ module.exports.postSignup=(req,res,next)=>{
         if(dat.length!=0){
             return res.render('auth/signup',{
                 title:'Signup',
-                errors:[{msg:'email already in use'}]
+                errors:[{msg:'email already in use'}],
+                isLoggedIn:req.isLoggedIn
             })
         }
         return User

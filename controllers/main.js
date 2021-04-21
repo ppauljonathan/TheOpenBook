@@ -23,7 +23,8 @@ module.exports.main=(req,res,next)=>{
             posts:data,
             currPage:pageNo,
             firstPage:1,
-            lastPage:totalPage
+            lastPage:totalPage,
+            isLoggedIn:req.isLoggedIn
         })
     })
     .catch(err=>{
@@ -33,7 +34,8 @@ module.exports.main=(req,res,next)=>{
 
 module.exports.getCreate=(req,res,next)=>{
     res.render('create',{
-        title:'New Post'
+        title:'New Post',
+        isLoggedIn:req.isLoggedIn
     })
 }
 
@@ -71,7 +73,8 @@ module.exports.getSinglePost=(req,res,next)=>{
     .then(post=>{
         res.render('singlePost',{
             title:'Reading Mode',
-            post:post
+            post:post,
+            isLoggedIn:req.isLoggedIn
         })
     })
     .catch(err=>{

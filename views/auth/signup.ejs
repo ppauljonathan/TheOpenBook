@@ -1,6 +1,6 @@
 <%-include('../includes/head',{title:title})%>
 <%-include('../includes/header')%>
-<%-include('../includes/navbar')%>
+<%-include('../includes/navbar',{isLoggedIn:isLoggedIn,title:title})%>
 <main class="main">
     <form class="centered signup"action="/signup" method="post">
 

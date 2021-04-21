@@ -1,6 +1,6 @@
 <%-include('./includes/head',{title:title})%>
 <%-include('./includes/header')%>
-<%-include('./includes/navbar')%>
+<%-include('./includes/navbar',{isLoggedIn:isLoggedIn,title:title})%>
 <main class="main">
     <form action="/create" method="post" class="form centered">
         <label for="heading" class="heading-label">Title</label>
