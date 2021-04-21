@@ -2,15 +2,36 @@ const {validationResult}=require('express-validator');
 const bcrypt=require('bcryptjs');
 
 const User=require('../models/user');
+const Session=require('../models/session');
 
 module.exports.getLogin=(req,res,next)=>{
-    res.render('auth/login',{
-        title:'Login',
-        errors:[]
-    })
+    if(req.headers.cookie){
+        Session
+        .findByIdAndDelete(req.headers.cookie.split('=')[1])
+        .then(result=>{
+            res
+            .clearCookie("session")
+            .render('auth/login',{
+                title:'Login',
+                errors:[]
+            })
+        })
+        .catch(err=>{
+            next(err);
+        })
+    }
+    else{
+        res
+        .clearCookie("session")
+        .render('auth/login',{
+            title:'Login',
+            errors:[]
+        })
+    }
 }
 
 module.exports.postLogin=(req,res,next)=>{
+    
     const emailOrUsername=req.body.emailOrUsername;
     const password=req.body.password;
     let query;
@@ -53,7 +74,14 @@ module.exports.postLogin=(req,res,next)=>{
     })
     .then(result=>{
         if(result==true){
-            return res.redirect('/');
+            const oldDate=new Date();
+            const nextday=new Date(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate()+1);
+            const session={
+                user:query[0],
+                expires:nextday
+            }
+            return Session
+            .create(session);
         }
         else{
             return res
@@ -63,7 +91,16 @@ module.exports.postLogin=(req,res,next)=>{
             })
         }
     })
-    //res.redirect('/login')
+    .then(sess=>{
+        req.isLoggedIn=true;
+        req.userId=query[0]._id.toString();
+        res
+        .cookie("session",sess._id.toString())
+        .redirect('/');
+    })
+    .catch(err=>{
+        next(err);
+    })
 }
 
 module.exports.getSignup=(req,res,next)=>{

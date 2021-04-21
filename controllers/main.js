@@ -1,4 +1,5 @@
 const Post=require('../models/post');
+const User=require('../models/user');
 
 const ITEMS_PER_PAGE=3;
 
@@ -10,6 +11,7 @@ module.exports.main=(req,res,next)=>{
         totalPage=Math.ceil(num/ITEMS_PER_PAGE);
         return Post
         .find()
+        .populate('creator')
         .sort({_id:-1})
         .skip((pageNo-1)*ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
@@ -38,12 +40,23 @@ module.exports.getCreate=(req,res,next)=>{
 module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
-        content:req.body.content,
-        creator:ObjectId("607e5cbe3571dc31f89275ec"),
+        content:req.body.content
     }
 
-    Post.create(post)
+    let creator;
+    User
+    .findById(req.userId)
+    .then(user=>{
+        post.creator=user;
+        creator=user;
+        return Post
+        .create(post)
+    })
     .then(result=>{
+        creator.posts.push(result);
+        return creator.save();
+    })
+    .then(udata=>{
         res.redirect('/');
     })
     .catch(err=>{
