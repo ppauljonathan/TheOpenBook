@@ -11,7 +11,12 @@ module.exports.clearSessions=(req,res,next)=>{
     .then(sessions=>{
         sessions.forEach(session => {
             if(session.expires<Date.now()){
-                return session.delete();
+                res.clearCookie("session");
+                req.isLoggedIn=false;
+                return session.delete()
+                .then(del=>{
+                    res.redirect('/login');
+                });
             }
         });
         next();
@@ -27,6 +32,9 @@ module.exports.assignUser=(req,res,next)=>{
         Session
         .findById(req.headers.cookie.split('=')[1])
         .then(session=>{
+            if(!session.user){
+                return res.clearCookie("session");
+            }
             req.isLoggedIn=true;
             req.userId=session.user.toString();
             next();
