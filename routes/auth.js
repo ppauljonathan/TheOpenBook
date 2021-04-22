@@ -1,6 +1,7 @@
 const router=require('express').Router();
 const {body}=require('express-validator');
-const authControllers=require('../controllers/auth');
+const authControllers=require('../controllers/auth')
+const isAuth=require('../middleware/isAuth');
 
 router.get('/login',authControllers.getLogin);
 router.post(
@@ -39,5 +40,7 @@ router.post(
     ],
     authControllers.postSignup
 );
+
+router.post('/delete-user/:userId',isAuth.isAuth,authControllers.deleteUser);
 
 module.exports=router;

@@ -3,6 +3,7 @@ const bcrypt=require('bcryptjs');
 
 const User=require('../models/user');
 const Session=require('../models/session');
+const Post=require('../models/post');
 
 module.exports.getLogin=(req,res,next)=>{
     if(req.headers.cookie){
@@ -165,4 +166,20 @@ module.exports.postSignup=(req,res,next)=>{
     .catch(err=>{
         next(err);
     })
+}
+
+module.exports.deleteUser=(req,res,next)=>{
+    if(req.body.sure==='false'){
+        return res.redirect('/profile');
+    }
+    else{
+        User
+        .findByIdAndDelete(req.userId)
+        .then(user=>{
+            res.redirect('/login');
+        })
+        .catch(err=>{
+            next(err);
+        })
+    }
 }

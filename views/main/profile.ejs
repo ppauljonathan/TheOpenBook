@@ -5,6 +5,10 @@
     <div class="wrapper">
         <p class="heading">Username: <%=user.username%></p>
         <%if(title==='Profile'){%>
+            <form class="delete-user-form" action="/delete-user/<%=user._id.toString()%>" method="post">
+                <button class="button" type="submit" onclick="deleteAccount()">Delete Accout</button>
+                <input type="hidden" name="sure" value="true" id="sure">
+            </form>
             <%for(let i=0;i<user.posts.length;i++){%>
                 <a href="/post/<%=user.posts[i]._id%>" class="profile-post"><%=user.posts[i].heading%></a>
             <%}%>
@@ -14,5 +18,6 @@
             <%}%>
         <%}%>
     </div>
+    <script src="/js/deleteConfirm.js"></script>
 </main>
 <%-include('../includes/tail')%>

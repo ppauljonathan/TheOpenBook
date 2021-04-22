@@ -80,3 +80,10 @@
     width: fit-content;
     right: 5%;
 }
+
+.delete-user-form{
+    width: fit-content;
+    height: fit-content;
+    top:15%;
+    right: 15%;
+}
