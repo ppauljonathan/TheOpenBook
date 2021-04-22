@@ -39,12 +39,17 @@ module.exports.assignUser=(req,res,next)=>{
         Session
         .findById(req.headers.cookie.split('=')[1])
         .then(session=>{
-            console.log(session);
-            // if(!session.user){
-            //     return res.clearCookie("session");
-            // }
-            // req.isLoggedIn=true;
-            // req.userId=session.user.toString();
+            if(!session){
+                console.log('invalid session');
+                return res
+                .clearCookie("session")
+                .redirect('/login');
+            }
+            if(!session.user){
+                return res.clearCookie("session");
+            }
+            req.isLoggedIn=true;
+            req.userId=session.user.toString();
             next();
         })
         .catch(err=>{
