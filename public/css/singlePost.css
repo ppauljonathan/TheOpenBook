@@ -73,3 +73,10 @@
     left:15vw;
     font-size: 4vh;
 }
+
+.post-authour{
+    top:5%;
+    height: 20%;
+    width: fit-content;
+    right: 5%;
+}

@@ -70,6 +70,7 @@ module.exports.getSinglePost=(req,res,next)=>{
     const postId=req.params.postId;
     Post
     .findById(postId)
+    .populate('creator')
     .then(post=>{
         res.render('main/singlePost',{
             title:'Reading Mode',
