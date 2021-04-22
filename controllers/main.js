@@ -74,7 +74,8 @@ module.exports.getSinglePost=(req,res,next)=>{
         res.render('main/singlePost',{
             title:'Reading Mode',
             post:post,
-            isLoggedIn:req.isLoggedIn
+            isLoggedIn:req.isLoggedIn,
+            userId:req.userId
         })
     })
     .catch(err=>{
@@ -96,4 +97,28 @@ module.exports.getProfile=(req,res,next)=>{
     .catch(err=>{
         next(err)
     })
+}
+
+module.exports.deletePost=(req,res,next)=>{
+    const postId=req.params.postId;  
+    Post
+    .findByIdAndDelete(postId)
+    .then(post=>{
+        return User
+        .findById(post.creator.toString());
+    })
+    .then(user=>{
+        for(let i=0;i<user.posts.length;i++){
+            if(user.posts[i]==postId){
+                user.posts.splice(i,1);
+            }
+        }
+        return user.save();
+    })
+    .then(data=>{
+        res.redirect('/');
+    })
+    .catch(err=>{
+        next(err);
+    }); 
 }

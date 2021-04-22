@@ -40,7 +40,6 @@ module.exports.assignUser=(req,res,next)=>{
         .findById(req.headers.cookie.split('=')[1])
         .then(session=>{
             if(!session){
-                console.log('invalid session');
                 return res
                 .clearCookie("session")
                 .redirect('/login');

@@ -34,3 +34,10 @@
     color: white;
     border: 1px dotted white;
 }
+
+.delete-post-form{
+    width: fit-content;
+    height: fit-content;
+    top:25%;
+    right: 15%;
+}

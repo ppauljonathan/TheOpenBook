@@ -6,6 +6,7 @@ const isAuth=require('../middleware/isAuth');
 router.get('/',mainController.main);
 
 router.get('/post/:postId',mainController.getSinglePost)
+router.post('/delete-post/:postId',isAuth.isAuth,mainController.deletePost);
 
 router.get('/create',isAuth.isAuth,mainController.getCreate);
 router.post('/create',isAuth.isAuth,mainController.postCreate);
