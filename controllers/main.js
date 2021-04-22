@@ -122,3 +122,103 @@ module.exports.deletePost=(req,res,next)=>{
         next(err);
     }); 
 }
+
+module.exports.upvotePost=(req,res,next)=>{
+    const userId=req.userId;
+    const postId=req.params.postId;
+    let flag=-1;
+    Post
+    .findById(postId)
+    .then(post=>{
+        for(let i=0;i<post.upvoters.length;i++){
+            if(post.upvoters[i].toString()===userId.toString()){
+                flag=i;
+                break;
+            }
+        }
+        for(let i=0;i<post.downvoters.length;i++){
+            if(post.downvoters[i].toString()===userId.toString()){
+                post.downvoters.splice(i,1);
+                break;
+            }
+        }
+        if(flag==-1){
+            post.upvoters.push(userId);
+        }
+        else{
+            post.upvoters.splice(flag,1);
+        }
+        return post.save();
+    })
+    .then(savedPost=>{
+        return User
+        .findById(userId);
+    })
+    .then(user=>{
+        if(flag==-1){
+            user.favorites.push(postId);
+        }
+        else{
+            for(let i=0;i<user.favorites.length;i++){
+                if(user.favorites[i].toString()===postId.toString()){
+                    user.favorites.splice(i,1);
+                    break;
+                }
+            }
+        }
+        return user.save();
+    })
+    .then(savedUser=>{
+        res.redirect(`/post/${postId}`);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.downvotePost=(req,res,next)=>{
+    const postId=req.params.postId;
+    const userId=req.userId;
+    let flag=-1;
+    Post
+    .findById(postId)
+    .then(post=>{
+        for(let i=0;i<post.downvoters.length;i++){
+            if(post.downvoters[i].toString()===userId){
+                flag=i;
+                break;
+            }
+        }
+        for(let i=0;i<post.upvoters.length;i++){
+            if(post.upvoters[i].toString()===userId){
+                post.upvoters.splice(i,1);
+            }
+        }
+        if(flag==-1){
+            post.downvoters.push(userId);
+        }
+        else{
+            post.downvoters.splice(flag,1);
+        }
+        return post.save()
+    })
+    .then(savedPost=>{
+        return User
+        .findById(userId);
+    })
+    .then(user=>{
+        for(let i=0;i<user.favorites.length;i++){
+            if(user.favorites[i].toString()===postId){
+                user.favorites.splice(i,1);
+                break;
+            }
+        }
+        return user.save()
+    })
+    .then(savedUser=>{
+        res.redirect(`/post/${postId}`);
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+}

@@ -41,3 +41,35 @@
     top:25%;
     right: 15%;
 }
+
+.vote-form{
+    position: absolute;
+    width: 0%;
+    height: 0%;
+    top: 0%;
+    left: 0%;
+}
+
+.num{
+    position: absolute;
+    top:5%;
+    left: 11%;
+    width: fit-content;
+    height: fit-content;
+}
+
+.up{
+    width: fit-content;
+    height: fit-content;
+    top: 0.5vh;
+    left: 5vw;
+    font-size: 4vh;
+}
+
+.down{
+    width: fit-content;
+    height: fit-content;
+    top:0.5vh;
+    left:15vw;
+    font-size: 4vh;
+}

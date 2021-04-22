@@ -13,7 +13,15 @@ const postSchema=new Schema({
     creator:{
         type:mongoose.Types.ObjectId,
         ref:'User'
-    }
+    },
+    upvoters:[{
+        type:mongoose.Types.ObjectId,
+        ref:'User'
+    }],
+    downvoters:[{
+        type:mongoose.Types.ObjectId,
+        ref:'User'
+    }]
 });
 
 module.exports=mongoose.model('Post',postSchema);
