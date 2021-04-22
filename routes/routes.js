@@ -17,5 +17,6 @@ router.get('/create',isAuth.isAuth,mainController.getCreate);
 router.post('/create',isAuth.isAuth,mainController.postCreate);
 
 router.get('/profile',isAuth.isAuth,mainController.getProfile);
+router.get('/favorites',isAuth.isAuth,mainController.getProfile);
 
 module.exports=router;

@@ -1,8 +1,8 @@
 <nav class="nav">
     <a href="/" class="nav-list-item <%if(title==='TheOpenBook'){%>active<%}else{%><%}%>">FEED</a>
     <a href="/create" class="nav-list-item <%if(title==='New Post'){%>active<%}else{%><%}%>">CREATE</a>
-    <a href="/profile" class="nav-list-item">PROFILE</a>
-    <a href="/favorites" class="nav-list-item">FAVORITES</a>
+    <a href="/profile" class="nav-list-item <%if(title==='Profile'){%>active<%}else{%><%}%>">PROFILE</a>
+    <a href="/favorites" class="nav-list-item <%if(title==='Favorites'){%>active<%}else{%><%}%>">FAVORITES</a>
     <a href="/login" class="nav-list-item login-logout"><%if(!isLoggedIn){%>LOGIN<%}else{%>LOGOUT<%}%></a>
     
 </nav>

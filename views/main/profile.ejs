@@ -4,10 +4,15 @@
 <main class="main">
     <div class="wrapper">
         <p class="heading">Username: <%=user.username%></p>
-        <%for(let i=0;i<user.posts.length;i++){%>
-            <a href="/post/<%=user.posts[i]._id%>" class="profile-post"><%=user.posts[i].heading%></a>
+        <%if(title==='Profile'){%>
+            <%for(let i=0;i<user.posts.length;i++){%>
+                <a href="/post/<%=user.posts[i]._id%>" class="profile-post"><%=user.posts[i].heading%></a>
+            <%}%>
+        <%}else if(title==='Favorites'){%>
+            <%for(let i=0;i<user.favorites.length;i++){%>
+                <a href="/post/<%=user.favorites[i]._id%>" class="profile-post"><%=user.favorites[i].heading%></a>
+            <%}%>
         <%}%>
-
     </div>
 </main>
 <%-include('../includes/tail')%>

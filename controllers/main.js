@@ -87,12 +87,22 @@ module.exports.getProfile=(req,res,next)=>{
     User
     .findById(req.userId)
     .populate('posts')
+    .populate('favorites')
     .then(user=>{
-        return res.render('main/profile',{
-            title:'Profile',
-            isLoggedIn:req.isLoggedIn,
-            user:user
-        })
+        if(req.url==='/profile'){
+            return res.render('main/profile',{
+                title:'Profile',
+                isLoggedIn:req.isLoggedIn,
+                user:user
+            });
+        }
+        else if(req.url==='/favorites'){
+            return res.render('main/profile',{
+                title:'Favorites',
+                isLoggedIn:req.isLoggedIn,
+                user:user
+            });
+        }
     })
     .catch(err=>{
         next(err)
@@ -101,16 +111,24 @@ module.exports.getProfile=(req,res,next)=>{
 
 module.exports.deletePost=(req,res,next)=>{
     const postId=req.params.postId;  
+    const userId=req.userId
     Post
     .findByIdAndDelete(postId)
     .then(post=>{
         return User
-        .findById(post.creator.toString());
+        .findById(userId.toString());
     })
     .then(user=>{
         for(let i=0;i<user.posts.length;i++){
             if(user.posts[i]==postId){
                 user.posts.splice(i,1);
+                break;
+            }
+        }
+        for(let i=0;i<user.favorites.length;i++){
+            if(user.favorites[i]==postId){
+                user.favorites.splice(i,1);
+                break;
             }
         }
         return user.save();
