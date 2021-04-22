@@ -17,7 +17,7 @@ module.exports.main=(req,res,next)=>{
         .limit(ITEMS_PER_PAGE)
     })
     .then(data=>{
-        res.render('index',
+        res.render('main/index',
         {
             title:'TheOpenBook',
             posts:data,
@@ -33,7 +33,7 @@ module.exports.main=(req,res,next)=>{
 }
 
 module.exports.getCreate=(req,res,next)=>{
-    res.render('create',{
+    res.render('main/create',{
         title:'New Post',
         isLoggedIn:req.isLoggedIn
     })
@@ -71,7 +71,7 @@ module.exports.getSinglePost=(req,res,next)=>{
     Post
     .findById(postId)
     .then(post=>{
-        res.render('singlePost',{
+        res.render('main/singlePost',{
             title:'Reading Mode',
             post:post,
             isLoggedIn:req.isLoggedIn
@@ -80,4 +80,20 @@ module.exports.getSinglePost=(req,res,next)=>{
     .catch(err=>{
         next(err);
     });
+}
+
+module.exports.getProfile=(req,res,next)=>{
+    User
+    .findById(req.userId)
+    .populate('posts')
+    .then(user=>{
+        return res.render('main/profile',{
+            title:'Profile',
+            isLoggedIn:req.isLoggedIn,
+            user:user
+        })
+    })
+    .catch(err=>{
+        next(err)
+    })
 }

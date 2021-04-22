@@ -78,7 +78,8 @@ module.exports.postLogin=(req,res,next)=>{
     .then(result=>{
         if(result==true){
             const oldDate=new Date();
-            const nextday=new Date(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate()+1);
+            // const nextday=new Date(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate()+1);
+            const nextday=new Date(oldDate.getTime()+45*60000)
             const session={
                 user:query[0],
                 expires:nextday

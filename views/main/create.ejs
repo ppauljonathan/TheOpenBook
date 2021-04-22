@@ -1,6 +1,6 @@
-<%-include('./includes/head',{title:title})%>
-<%-include('./includes/header')%>
-<%-include('./includes/navbar',{isLoggedIn:isLoggedIn,title:title})%>
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{isLoggedIn:isLoggedIn,title:title})%>
 <main class="main">
     <form action="/create" method="post" class="form centered">
         <label for="heading" class="heading-label">Title</label>
@@ -11,4 +11,4 @@
         <button type="submit" class="button submit">submit</button>
     </form>
 </main>
-<%-include('./includes/tail')%>
+<%-include('../includes/tail')%>

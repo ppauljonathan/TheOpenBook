@@ -4,6 +4,7 @@
     margin: auto;
     border: 2px solid white;
     border-radius: 5px;
+    padding: 2rem;
 }
 
 .heading{
@@ -20,4 +21,16 @@
     height: fit-content;
     padding: 2rem;
     font-size: 4vh;
+}
+
+.profile-post{
+    position: relative;
+    display: block;
+    width: 80%;
+    height: fit-content;
+    left: 5%;
+    padding: 3%;
+    text-decoration: none;
+    color: white;
+    border: 1px dotted white;
 }
