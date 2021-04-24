@@ -1,4 +1,5 @@
 const Post=require('../models/post');
+const User=require('../models/user');
 
 const ITEMS_PER_PAGE=3;
 
@@ -39,10 +40,19 @@ module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.user
+        creator:req.session.userId
     }
-
+    let postId;
     Post.create(post)
+    .then(post=>{
+        postId=post._id;
+        return User
+        .findById(post.creator);
+    })
+    .then(user=>{
+        user.posts.push(postId);
+        return user.save();
+    })
     .then(result=>{
         res.redirect('/');
     })

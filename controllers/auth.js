@@ -50,6 +50,7 @@ module.exports.getLogin=(req,res,next)=>{
 module.exports.postLogin=(req,res,next)=>{
     const value=req.body.emailOrUsername;
     const password=req.body.password;
+    let user;
     checkEmailAndUsername(value)
     .then(data=>{
         if(data==='unsuccessful'){
@@ -59,13 +60,15 @@ module.exports.postLogin=(req,res,next)=>{
             })
         }
         else{
+            user=data[0];
             return bcrypt
             .compare(password,data[0].password);
         }
     })
     .then(datas=>{
-        if(datas!=='undefined'){
+        if(typeof datas!=='undefined'){
             if(datas===true){
+                req.session.userId=user._id;
                 res.redirect('/');
             }
             else{

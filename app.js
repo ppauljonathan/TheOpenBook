@@ -30,17 +30,6 @@ app.use(session({
 
 app.use(express.urlencoded({extended:true}));
 
-app.use((req,res,next)=>{
-    const user={
-        id:9919103121,
-        userName:'P Paul Jonathan',
-        email:'test@test.com',
-        password:'wefrwedf'
-    }
-    req.user=user;
-    next();
-});
-
 app.use(express.static('public'));
 
 app.set('view engine','ejs');
@@ -54,14 +43,20 @@ app.use(errorHandlers.get404);
 
 app.use(errorHandlers.get500);
 
-mongoose.connect(
+mongoose
+.connect(
     MONGO_URI,
     {
-        useNewUrlParser:true,
-        useUnifiedTopology:true
+        useUnifiedTopology:true,
+        useNewUrlParser:true
     }
-);
-
-app.listen(process.env.PORT||3000,()=>{
-    console.log(`listening at http://localhost:${process.env.PORT||3000}`);
-});
+)
+.then(data=>{
+    console.log('connected to DB');
+    app.listen(process.env.PORT||3000,()=>{
+        console.log(`listening at http://localhost:${process.env.PORT||3000}`);
+    });
+})
+.catch(err=>{
+    console.log(err);
+})
