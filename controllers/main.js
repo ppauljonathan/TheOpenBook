@@ -15,7 +15,7 @@ module.exports.main=(req,res,next)=>{
         .limit(ITEMS_PER_PAGE)
     })
     .then(data=>{
-        res.render('index',
+        res.render('client/index',
         {
             title:'TheOpenBook',
             posts:data,
@@ -30,7 +30,7 @@ module.exports.main=(req,res,next)=>{
 }
 
 module.exports.getCreate=(req,res,next)=>{
-    res.render('create',{
+    res.render('client/create',{
         title:'New Post'
     })
 }
@@ -56,7 +56,7 @@ module.exports.getSinglePost=(req,res,next)=>{
     Post
     .findById(postId)
     .then(post=>{
-        res.render('singlePost',{
+        res.render('client/singlePost',{
             title:'Reading Mode',
             post:post
         })
