@@ -11,6 +11,7 @@ module.exports.main=(req,res,next)=>{
         totalPage=Math.ceil(num/ITEMS_PER_PAGE);
         return Post
         .find()
+        .populate('creator')
         .sort({_id:-1})
         .skip((pageNo-1)*ITEMS_PER_PAGE)
         .limit(ITEMS_PER_PAGE)
@@ -42,14 +43,14 @@ module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.session.userId
+        creator:req.session.user
     }
     let postId;
     Post.create(post)
     .then(post=>{
         postId=post._id;
         return User
-        .findById(post.creator);
+        .findById(req.session.user);
     })
     .then(user=>{
         user.posts.push(postId);
@@ -67,11 +68,13 @@ module.exports.getSinglePost=(req,res,next)=>{
     const postId=req.params.postId;
     Post
     .findById(postId)
+    .populate('creator')
     .then(post=>{
         res.render('client/singlePost',{
             title:'Reading Mode',
             post:post,
-            isLoggedIn:req.session.isLoggedIn
+            isLoggedIn:req.session.isLoggedIn,
+            user:req.session.user
         })
     })
     .catch(err=>{
@@ -93,4 +96,33 @@ module.exports.getProfile=(req,res,next)=>{
     .catch(err=>{
         next(err)
     })
+}
+
+module.exports.getEditPost=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
+    .then(oldpost=>{
+        res.render('client/create',{
+            title:'Edit Mode',
+            isLoggedIn:req.session.isLoggedIn,
+            oldpost:oldpost
+        })
+    })
+    .catch();
+}
+
+module.exports.postEditPost=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
+    .then(post=>{
+        post.heading=req.body.heading;
+        post.content=req.body.content;
+        return post.save();
+    })
+    .then(saved=>{
+        res.redirect('/');
+    })
+    .catch(err=>{
+        next(err);
+    });
 }

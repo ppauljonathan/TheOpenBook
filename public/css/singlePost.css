@@ -34,3 +34,15 @@
     color: white;
     border: 1px dotted white;
 }
+
+.post-authour{
+    top:15%;
+    right: 3%;
+    height: 20%;
+    width: fit-content;
+}
+
+.edit-post{
+    top: 25%;
+    right: 3%;
+}

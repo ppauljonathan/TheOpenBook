@@ -151,4 +151,3 @@ module.exports.postSignup=(req,res,next)=>{
         next(err);
     })
 }
-
