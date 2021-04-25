@@ -68,7 +68,8 @@ module.exports.postLogin=(req,res,next)=>{
     .then(datas=>{
         if(typeof datas!=='undefined'){
             if(datas===true){
-                req.session.userId=user._id;
+                req.session.user=user._id
+                req.session.isLoggedIn=true;
                 res.redirect('/');
             }
             else{
@@ -90,25 +91,54 @@ module.exports.getSignup=(req,res,next)=>{
 }
 
 module.exports.postSignup=(req,res,next)=>{
-    const errors=validationResult(req);
-    if(errors.array().length>0){
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
         return res.render('auth/signup',{
             title:'Signup',
-            errors:errors.array()
+            errors:errors.array({onlyFirstError:true})
         })
     }
-    const user={
-        username:req.body.username,
-        email:req.body.email
-    };
-    bcrypt
-    .hash(req.body.password,10)
-    .then(hashedpwd=>{
-        user.password=hashedpwd;
-        return User.create(user);
+    const email=req.body.email;
+    const username=req.body.username;
+    const password=req.body.password;
+    User
+    .find({email:email})
+    .then(dat=>{
+        if(dat.length!=0){
+            return res.render('auth/signup',{
+                title:'Signup',
+                errors:[{msg:'email already in use'}]
+            })
+        }
+        return User
+        .find({username:username});
     })
-    .then(saveduser=>{
-        res.redirect('/login');
+    .then(dat=>{
+        if(typeof dat!=='undefined'){
+            if(dat.length!=0){
+                return res.render('auth/signup',{
+                    title:'Signup',
+                    errors:[{msg:'username already in use'}]
+                })
+            }
+            return bcrypt
+            .hash(password,12)
+        }
+    })
+    .then(hashedpwd=>{
+        if(typeof hashedpwd!=='undefined'){
+            const user=new User({
+                email:email,
+                username:username,
+                password:hashedpwd
+            });
+            return user.save();
+        }
+    })
+    .then(d=>{
+        if(typeof d!=='undefined'){
+            res.redirect('/login');
+        }
     })
     .catch(err=>{
         next(err);

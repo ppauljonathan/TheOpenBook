@@ -28,6 +28,11 @@ app.use(session({
     store:store
 }))
 
+app.use((req,res,next)=>{
+    console.log('LOGGED IN : ',req.session.isLoggedIn);
+    next();
+});
+
 app.use(express.urlencoded({extended:true}));
 
 app.use(express.static('public'));
