@@ -78,3 +78,19 @@ module.exports.getSinglePost=(req,res,next)=>{
         next(err);
     });
 }
+
+module.exports.getProfile=(req,res,next)=>{
+    User
+    .findById(req.session.user)
+    .populate('posts')
+    .then(user=>{
+        return res.render('client/profile',{
+            title:'Profile',
+            isLoggedIn:req.isLoggedIn,
+            user:user
+        })
+    })
+    .catch(err=>{
+        next(err)
+    })
+}

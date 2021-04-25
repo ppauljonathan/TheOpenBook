@@ -10,4 +10,6 @@ router.get('/post/:postId',mainController.getSinglePost)
 router.get('/create',isAuth,mainController.getCreate);
 router.post('/create',isAuth,mainController.postCreate);
 
+router.get('/profile',isAuth,mainController.getProfile);
+
 module.exports=router;
