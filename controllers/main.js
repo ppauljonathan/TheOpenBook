@@ -22,7 +22,8 @@ module.exports.main=(req,res,next)=>{
             posts:data,
             currPage:pageNo,
             firstPage:1,
-            lastPage:totalPage
+            lastPage:totalPage,
+            isLoggedIn:req.session.isLoggedIn
         })
     })
     .catch(err=>{
@@ -32,7 +33,8 @@ module.exports.main=(req,res,next)=>{
 
 module.exports.getCreate=(req,res,next)=>{
     res.render('client/create',{
-        title:'New Post'
+        title:'New Post',
+        isLoggedIn:req.session.isLoggedIn
     })
 }
 
@@ -68,7 +70,8 @@ module.exports.getSinglePost=(req,res,next)=>{
     .then(post=>{
         res.render('client/singlePost',{
             title:'Reading Mode',
-            post:post
+            post:post,
+            isLoggedIn:req.session.isLoggedIn
         })
     })
     .catch(err=>{

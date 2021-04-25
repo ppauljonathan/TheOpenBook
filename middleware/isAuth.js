@@ -6,3 +6,10 @@ module.exports.isAuth=(req,res,next)=>{
         next();
     }
 }
+
+module.exports.remAuth=(req,res,next)=>{
+    if(req.session.isLoggedIn===true){
+        req.session.isLoggedIn=false;
+    }
+    next();
+}

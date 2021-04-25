@@ -43,7 +43,8 @@ function checkEmailAndUsername(value){
 module.exports.getLogin=(req,res,next)=>{
     res.render('auth/login',{
         title:'Login',
-        errors:[]
+        errors:[],
+        isLoggedIn:req.session.isLoggedIn
     })
 }
 
@@ -56,7 +57,8 @@ module.exports.postLogin=(req,res,next)=>{
         if(data==='unsuccessful'){
             return res.render('auth/login',{
                 title:'Login',
-                errors:[{msg:'E-mail Or Username Incorrect'}]
+                errors:[{msg:'E-mail Or Username Incorrect'}],
+                isLoggedIn:req.session.isLoggedIn
             })
         }
         else{
@@ -75,7 +77,8 @@ module.exports.postLogin=(req,res,next)=>{
             else{
                 res.render('auth/login',{
                     title:'Login',
-                    errors:[{msg:'Password Incorrect'}]
+                    errors:[{msg:'Password Incorrect'}],
+                    isLoggedIn:req.session.isLoggedIn
                 });
             }
         }
@@ -86,7 +89,8 @@ module.exports.postLogin=(req,res,next)=>{
 module.exports.getSignup=(req,res,next)=>{
     res.render('auth/signup',{
         title:'Signup',
-        errors:[]
+        errors:[],
+        isLoggedIn:req.session.isLoggedIn
     })
 }
 
@@ -95,7 +99,8 @@ module.exports.postSignup=(req,res,next)=>{
     if (!errors.isEmpty()){
         return res.render('auth/signup',{
             title:'Signup',
-            errors:errors.array({onlyFirstError:true})
+            errors:errors.array({onlyFirstError:true}),
+            isLoggedIn:req.session.isLoggedIn
         })
     }
     const email=req.body.email;
@@ -107,7 +112,8 @@ module.exports.postSignup=(req,res,next)=>{
         if(dat.length!=0){
             return res.render('auth/signup',{
                 title:'Signup',
-                errors:[{msg:'email already in use'}]
+                errors:[{msg:'email already in use'}],
+                isLoggedIn:req.session.isLoggedIn
             })
         }
         return User
@@ -118,7 +124,8 @@ module.exports.postSignup=(req,res,next)=>{
             if(dat.length!=0){
                 return res.render('auth/signup',{
                     title:'Signup',
-                    errors:[{msg:'username already in use'}]
+                    errors:[{msg:'username already in use'}],
+                    isLoggedIn:req.session.isLoggedIn
                 })
             }
             return bcrypt
