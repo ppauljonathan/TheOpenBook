@@ -1,9 +1,10 @@
 const router=require('express').Router();
 const {body}=require('express-validator');
-const authControllers=require('../controllers/auth')
-const isAuth=require('../middleware/isAuth');
 
-router.get('/login',authControllers.getLogin);
+const authControllers=require('../controllers/auth');
+const {remAuth}=require('../middleware/isAuth');
+
+router.get('/login',remAuth,authControllers.getLogin);
 router.post(
     '/login',
     [
@@ -15,7 +16,7 @@ router.post(
     authControllers.postLogin
 );
 
-router.get('/signup',authControllers.getSignup);
+router.get('/signup',remAuth,authControllers.getSignup);
 router.post(
     '/signup',
     [

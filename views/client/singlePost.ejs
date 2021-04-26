@@ -1,0 +1,26 @@
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
+<main class="main">
+    <div class="wrapper">
+        <%if(isLoggedIn){%>
+            <form action="/upvote/<%=post._id%>" method="post" class="delete-post-form">
+                <button type="submit" class="up">&uarr;</button>
+            </form>
+            <div class="num"><%=post.upvoters.length-post.downvoters.length%></div>
+            <form action="/downvote/<%=post._id%>" method="post" class="delete-post-form">
+                <button type="submit" class="down">&darr;</button>
+            </form>
+        <%}%>
+        <div class="heading"><%=post.heading%></div>
+        <div class="post-authour">By <%=post.creator.username%></div>
+        <%if(typeof user!=='undefined'&&user.toString()===post.creator._id.toString()){%>
+            <form action="/delete-post/<%=post._id%>" method="post" class="delete-post-form">
+                <button class="button delete-post" type="submit">Delete</button>
+            </form>
+            <a href="/edit-post/<%=post._id%>" class="button edit-post">Edit</a>    
+        <%}%>
+        <div class="content"><%=post.content%></div>
+    </div>
+</main>
+<%-include('../includes/tail')%>

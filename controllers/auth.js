@@ -2,118 +2,95 @@ const {validationResult}=require('express-validator');
 const bcrypt=require('bcryptjs');
 
 const User=require('../models/user');
-const Session=require('../models/session');
-const Post=require('../models/post');
 
-module.exports.getLogin=(req,res,next)=>{
-    if(req.headers.cookie){
-        Session
-        .findByIdAndDelete(req.headers.cookie.split('=')[1])
-        .then(result=>{
-            res
-            .clearCookie("session")
-            .render('auth/login',{
-                title:'Login',
-                errors:[],
-                isLoggedIn:req.isLoggedIn
-            })
+function checkEmailAndUsername(value){
+    return new Promise((resolve,reject)=>{
+        User
+        .find({email:value})
+        .then(user=>{
+            if(user.length!=0){
+                resolve(user);
+            }
+            else{
+                return false;
+            }
+        })
+        .then(fal=>{
+            if(!fal){
+                return User
+                .find({username:value});
+            }
+        })
+        .then(user=>{
+            if(user.length!=0){
+                resolve(user);
+            }
+            else{
+                return false;
+            }
+        })
+        .then(fal=>{
+            if(!fal){
+                resolve('unsuccessful')
+            }
         })
         .catch(err=>{
-            next(err);
+            reject(err);
         })
-    }
-    else{
-        res
-        .clearCookie("session")
-        .render('auth/login',{
-            title:'Login',
-            errors:[],
-            isLoggedIn:req.isLoggedIn
-        })
-    }
+    });
+}
+
+module.exports.getLogin=(req,res,next)=>{
+    res.render('auth/login',{
+        title:'Login',
+        errors:[],
+        isLoggedIn:req.session.isLoggedIn
+    })
 }
 
 module.exports.postLogin=(req,res,next)=>{
-    
-    const emailOrUsername=req.body.emailOrUsername;
+    const value=req.body.emailOrUsername;
     const password=req.body.password;
-    let query;
-    User
-    .find({email:emailOrUsername})
+    let user;
+    checkEmailAndUsername(value)
     .then(data=>{
-        if(data.length==0){
-            return User
-            .find({username:emailOrUsername});
-        }
-        else{
-            query=data;
-            return true;
-        }
-    })
-    .then(tmodel=>{
-        if(tmodel.length==0){
-            return res
-            .render('auth/login',{
+        if(data==='unsuccessful'){
+            return res.render('auth/login',{
                 title:'Login',
-                errors:[{msg:'email/username incorrect'}],
-                isLoggedIn:req.isLoggedIn
+                errors:[{msg:'E-mail Or Username Incorrect'}],
+                isLoggedIn:req.session.isLoggedIn
             })
         }
         else{
-            if(tmodel==true){return tmodel;}
-            else{
-                query=tmodel;
-                return true;
-            }
-        }
-    })
-    .then(dat=>{
-        if(dat==true){
+            user=data[0];
             return bcrypt
-            .compare(password,query[0].password);
-        }
-        else{
-            return false;
+            .compare(password,data[0].password);
         }
     })
-    .then(result=>{
-        if(result==true){
-            const oldDate=new Date();
-            // const nextday=new Date(oldDate.getFullYear(),oldDate.getMonth(),oldDate.getDate()+1);
-            const nextday=new Date(oldDate.getTime()+45*60000)
-            const session={
-                user:query[0],
-                expires:nextday
+    .then(datas=>{
+        if(typeof datas!=='undefined'){
+            if(datas===true){
+                req.session.user=user._id
+                req.session.isLoggedIn=true;
+                res.redirect('/');
             }
-            return Session
-            .create(session);
-        }
-        else{
-            return res
-            .render('auth/login',{
-                title:'Login',
-                errors:[{msg:'Password Incorrect'}],
-                isLoggedIn:req.isLoggedIn
-            })
+            else{
+                res.render('auth/login',{
+                    title:'Login',
+                    errors:[{msg:'Password Incorrect'}],
+                    isLoggedIn:req.session.isLoggedIn
+                });
+            }
         }
     })
-    .then(sess=>{
-        req.isLoggedIn=true;
-        req.userId=query[0]._id.toString();
-        res
-        .cookie("session",sess._id.toString())
-        .redirect('/');
-    })
-    .catch(err=>{
-        next(err);
-    })
+    .catch(err=>{console.log(err);});
 }
 
 module.exports.getSignup=(req,res,next)=>{
     res.render('auth/signup',{
         title:'Signup',
         errors:[],
-        isLoggedIn:req.isLoggedIn
+        isLoggedIn:req.session.isLoggedIn
     })
 }
 
@@ -123,7 +100,7 @@ module.exports.postSignup=(req,res,next)=>{
         return res.render('auth/signup',{
             title:'Signup',
             errors:errors.array({onlyFirstError:true}),
-            isLoggedIn:req.isLoggedIn
+            isLoggedIn:req.session.isLoggedIn
         })
     }
     const email=req.body.email;
@@ -136,50 +113,41 @@ module.exports.postSignup=(req,res,next)=>{
             return res.render('auth/signup',{
                 title:'Signup',
                 errors:[{msg:'email already in use'}],
-                isLoggedIn:req.isLoggedIn
+                isLoggedIn:req.session.isLoggedIn
             })
         }
         return User
         .find({username:username});
     })
     .then(dat=>{
-        if(dat.length!=0){
-            return res.render('auth/signup',{
-                title:'Signup',
-                errors:[{msg:'username already in use'}]
-            })
+        if(typeof dat!=='undefined'){
+            if(dat.length!=0){
+                return res.render('auth/signup',{
+                    title:'Signup',
+                    errors:[{msg:'username already in use'}],
+                    isLoggedIn:req.session.isLoggedIn
+                })
+            }
+            return bcrypt
+            .hash(password,12)
         }
-        return bcrypt
-        .hash(password,12)
     })
     .then(hashedpwd=>{
-        const user=new User({
-            email:email,
-            username:username,
-            password:hashedpwd
-        });
-        return user.save();
+        if(typeof hashedpwd!=='undefined'){
+            const user=new User({
+                email:email,
+                username:username,
+                password:hashedpwd
+            });
+            return user.save();
+        }
     })
     .then(d=>{
-        res.redirect('/login');
+        if(typeof d!=='undefined'){
+            res.redirect('/login');
+        }
     })
     .catch(err=>{
         next(err);
     })
-}
-
-module.exports.deleteUser=(req,res,next)=>{
-    if(req.body.sure==='false'){
-        return res.redirect('/profile');
-    }
-    else{
-        User
-        .findByIdAndDelete(req.userId)
-        .then(user=>{
-            res.redirect('/login');
-        })
-        .catch(err=>{
-            next(err);
-        })
-    }
 }

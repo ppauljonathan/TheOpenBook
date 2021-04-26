@@ -3,8 +3,13 @@
     <%if(isLoggedIn){%>
     <a href="/create" class="nav-list-item <%if(title==='New Post'){%>active<%}else{%><%}%>">CREATE</a>
     <a href="/profile" class="nav-list-item <%if(title==='Profile'){%>active<%}else{%><%}%>">PROFILE</a>
+<<<<<<< HEAD
     <a href="/favorites" class="nav-list-item <%if(title==='Favorites'){%>active<%}else{%><%}%>">FAVORITES</a>
     <%}%>
     <a href="/login" class="nav-list-item login-logout"><%if(!isLoggedIn){%>LOGIN<%}else{%>LOGOUT<%}%></a>
     
+=======
+    <%}%>
+    <a href="/login" class="nav-list-item login-logout"><%if(!isLoggedIn){%>LOGIN<%}else{%>LOGOUT<%}%></a>
+>>>>>>> session
 </nav>

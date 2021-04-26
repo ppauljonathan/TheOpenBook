@@ -1,58 +1,15 @@
-const mongoose=require('mongoose');
-
-const Session=require('../models/session');
-
 module.exports.isAuth=(req,res,next)=>{
-    if(!req.headers.cookie){return res.redirect('/login');}
-    next();
-}
-
-module.exports.clearSessions=(req,res,next)=>{
-    Session
-    .find()
-    .then(sessions=>{
-        sessions.forEach(session => {
-            if(session.expires<Date.now()){
-                res.clearCookie("session");
-                req.isLoggedIn=false;
-                return session.delete()
-                .then(del=>{
-                    res.redirect('/login');
-                });
-            }
-        });
-        next();
-    })
-    .catch(err=>{
-        next(err);
-    })
-}
-
-module.exports.assignUser=(req,res,next)=>{
-    if(!req.headers.cookie){next();}
-    else if(!mongoose.isValidObjectId(req.headers.cookie.split('=')[1])){
-        res
-        .clearCookie("session")
-        .redirect('/login');
+    if(typeof req.session.isLoggedIn==='undefined'||!req.session.isLoggedIn){
+        return res.redirect('/login');
     }
     else{
-        Session
-        .findById(req.headers.cookie.split('=')[1])
-        .then(session=>{
-            if(!session){
-                return res
-                .clearCookie("session")
-                .redirect('/login');
-            }
-            if(!session.user){
-                return res.clearCookie("session");
-            }
-            req.isLoggedIn=true;
-            req.userId=session.user.toString();
-            next();
-        })
-        .catch(err=>{
-            next(err);
-        });
+        next();
     }
+}
+
+module.exports.remAuth=(req,res,next)=>{
+    if(req.session.isLoggedIn===true){
+        req.session.isLoggedIn=false;
+    }
+    next();
 }

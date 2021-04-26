@@ -17,14 +17,14 @@ module.exports.main=(req,res,next)=>{
         .limit(ITEMS_PER_PAGE)
     })
     .then(data=>{
-        res.render('main/index',
+        res.render('client/index',
         {
             title:'TheOpenBook',
             posts:data,
             currPage:pageNo,
             firstPage:1,
             lastPage:totalPage,
-            isLoggedIn:req.isLoggedIn
+            isLoggedIn:req.session.isLoggedIn
         })
     })
     .catch(err=>{
@@ -33,26 +33,28 @@ module.exports.main=(req,res,next)=>{
 }
 
 module.exports.getCreate=(req,res,next)=>{
-    res.render('main/create',{
+    res.render('client/create',{
         title:'New Post',
-        isLoggedIn:req.isLoggedIn
+        isLoggedIn:req.session.isLoggedIn
     })
 }
 
 module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
-        content:req.body.content
+        content:req.body.content,
+        creator:req.session.user,
     }
-
-    let creator;
-    User
-    .findById(req.userId)
+    let postId;
+    Post.create(post)
+    .then(post=>{
+        postId=post._id;
+        return User
+        .findById(req.session.user);
+    })
     .then(user=>{
-        post.creator=user;
-        creator=user;
-        return Post
-        .create(post)
+        user.posts.push(postId);
+        return user.save();
     })
     .then(result=>{
         creator.posts.push(result);
@@ -72,11 +74,11 @@ module.exports.getSinglePost=(req,res,next)=>{
     .findById(postId)
     .populate('creator')
     .then(post=>{
-        res.render('main/singlePost',{
+        res.render('client/singlePost',{
             title:'Reading Mode',
             post:post,
-            isLoggedIn:req.isLoggedIn,
-            userId:req.userId
+            isLoggedIn:req.session.isLoggedIn,
+            user:req.session.user
         })
     })
     .catch(err=>{
@@ -86,158 +88,128 @@ module.exports.getSinglePost=(req,res,next)=>{
 
 module.exports.getProfile=(req,res,next)=>{
     User
-    .findById(req.userId)
+    .findById(req.session.user)
     .populate('posts')
-    .populate('favorites')
     .then(user=>{
-        if(req.url==='/profile'){
-            return res.render('main/profile',{
-                title:'Profile',
-                isLoggedIn:req.isLoggedIn,
-                user:user
-            });
-        }
-        else if(req.url==='/favorites'){
-            return res.render('main/profile',{
-                title:'Favorites',
-                isLoggedIn:req.isLoggedIn,
-                user:user
-            });
-        }
+        return res.render('client/profile',{
+            title:'Profile',
+            isLoggedIn:req.session.isLoggedIn,
+            user:user
+        })
     })
     .catch(err=>{
         next(err)
     })
 }
 
-module.exports.deletePost=(req,res,next)=>{
-    const postId=req.params.postId;  
-    const userId=req.userId
+module.exports.getEditPost=(req,res,next)=>{
     Post
-    .findByIdAndDelete(postId)
+    .findById(req.params.postId)
+    .then(oldpost=>{
+        res.render('client/create',{
+            title:'Edit Mode',
+            isLoggedIn:req.session.isLoggedIn,
+            oldpost:oldpost
+        })
+    })
+    .catch();
+}
+
+module.exports.postEditPost=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
     .then(post=>{
-        return User
-        .findById(userId.toString());
+        post.heading=req.body.heading;
+        post.content=req.body.content;
+        return post.save();
     })
-    .then(user=>{
-        for(let i=0;i<user.posts.length;i++){
-            if(user.posts[i]==postId){
-                user.posts.splice(i,1);
-                break;
-            }
-        }
-        for(let i=0;i<user.favorites.length;i++){
-            if(user.favorites[i]==postId){
-                user.favorites.splice(i,1);
-                break;
-            }
-        }
-        return user.save();
-    })
-    .then(data=>{
+    .then(saved=>{
         res.redirect('/');
     })
     .catch(err=>{
         next(err);
-    }); 
+    });
 }
 
-module.exports.upvotePost=(req,res,next)=>{
-    const userId=req.userId;
+module.exports.postDeletePost=(req,res,next)=>{
     const postId=req.params.postId;
-    let flag=-1;
     Post
-    .findById(postId)
+    .findByIdAndDelete(postId)
     .then(post=>{
-        for(let i=0;i<post.upvoters.length;i++){
-            if(post.upvoters[i].toString()===userId.toString()){
-                flag=i;
-                break;
-            }
-        }
-        for(let i=0;i<post.downvoters.length;i++){
-            if(post.downvoters[i].toString()===userId.toString()){
-                post.downvoters.splice(i,1);
-                break;
-            }
-        }
-        if(flag==-1){
-            post.upvoters.push(userId);
-        }
-        else{
-            post.upvoters.splice(flag,1);
-        }
-        return post.save();
-    })
-    .then(savedPost=>{
         return User
-        .findById(userId);
+        .findById(post.creator.toString());
     })
     .then(user=>{
-        if(flag==-1){
-            user.favorites.push(postId);
-        }
-        else{
-            for(let i=0;i<user.favorites.length;i++){
-                if(user.favorites[i].toString()===postId.toString()){
-                    user.favorites.splice(i,1);
-                    break;
-                }
+        for(let i=0;i<user.posts.length;i++){
+            if(user.posts[i].toString()===postId.toString()){
+                user.posts.splice(i,1);
+                break;
             }
         }
         return user.save();
     })
     .then(savedUser=>{
-        res.redirect(`/post/${postId}`);
+        res.redirect('/');
     })
     .catch(err=>{
         next(err);
     })
 }
 
-module.exports.downvotePost=(req,res,next)=>{
-    const postId=req.params.postId;
-    const userId=req.userId;
-    let flag=-1;
+module.exports.postUpvote=(req,res,next)=>{
     Post
-    .findById(postId)
+    .findById(req.params.postId)
     .then(post=>{
-        for(let i=0;i<post.downvoters.length;i++){
-            if(post.downvoters[i].toString()===userId){
-                flag=i;
-                break;
+        const index=post.upvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        const bindex=post.downvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        if(index===-1){
+            if(bindex!==-1){
+                post.downvoters.splice(bindex,1);
             }
-        }
-        for(let i=0;i<post.upvoters.length;i++){
-            if(post.upvoters[i].toString()===userId){
-                post.upvoters.splice(i,1);
-            }
-        }
-        if(flag==-1){
-            post.downvoters.push(userId);
+            post.upvoters.push(req.session.user);
         }
         else{
-            post.downvoters.splice(flag,1);
+            post.upvoters.splice(bindex,1);
+        }
+        return post.save();
+    })
+    .then(saved=>{
+        res.redirect('/post/'+req.params.postId);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.postDownvote=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
+    .then(post=>{
+        const index=post.downvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        const bindex=post.upvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        if(index===-1){
+            if(bindex!==-1){
+                post.upvoters.splice(bindex,1);
+            }
+            post.downvoters.push(req.session.user);
+        }
+        else{
+            post.downvoters.splice(index,1);
         }
         return post.save()
     })
-    .then(savedPost=>{
-        return User
-        .findById(userId);
-    })
-    .then(user=>{
-        for(let i=0;i<user.favorites.length;i++){
-            if(user.favorites[i].toString()===postId){
-                user.favorites.splice(i,1);
-                break;
-            }
-        }
-        return user.save()
-    })
-    .then(savedUser=>{
-        res.redirect(`/post/${postId}`);
+    .then(saved=>{
+        res.redirect('/post/'+req.params.postId);
     })
     .catch(err=>{
-        console.log(err);
+        next(err);
     })
 }
