@@ -46,3 +46,16 @@
     top: 8vh;
     right: 3%;
 }
+
+.delete-post-form{
+    top:0%;
+    left: 0%;
+    width: 0%;
+    height: 0%;
+}
+
+.delete-post{
+    position: relative;
+    top: 15vh;
+    left: 84vw;
+}

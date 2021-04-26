@@ -40,13 +40,10 @@ module.exports.getCreate=(req,res,next)=>{
 }
 
 module.exports.postCreate=(req,res,next)=>{
-    const oldDate=new Date();
-    const newDate=new Date(oldDate.getTime()+0.15*60000);
     const post={
         heading:req.body.heading,
         content:req.body.content,
         creator:req.session.user,
-        expiresAt:newDate
     }
     let postId;
     Post.create(post)
@@ -128,4 +125,29 @@ module.exports.postEditPost=(req,res,next)=>{
     .catch(err=>{
         next(err);
     });
+}
+
+module.exports.postDeletePost=(req,res,next)=>{
+    const postId=req.params.postId;
+    Post
+    .findByIdAndDelete(postId)
+    .then(post=>{
+        return User
+        .findById(post.creator.toString());
+    })
+    .then(user=>{
+        for(let i=0;i<user.posts.length;i++){
+            if(user.posts[i].toString()===postId.toString()){
+                user.posts.splice(i,1);
+                break;
+            }
+        }
+        return user.save();
+    })
+    .then(savedUser=>{
+        res.redirect('/');
+    })
+    .catch(err=>{
+        next(err);
+    })
 }

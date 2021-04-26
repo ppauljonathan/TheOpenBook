@@ -30,6 +30,8 @@ router.post(
     mainController.postEditPost
 );
 
+router.post('/delete-post/:postId',isAuth,mainController.postDeletePost)
+
 router.get('/profile',isAuth,mainController.getProfile);
 
 module.exports=router;

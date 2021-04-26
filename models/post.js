@@ -14,8 +14,7 @@ const postSchema=new Schema(
         creator:{
             type:mongoose.Types.ObjectId,
             ref:'User'
-        },
-        expiresAt:Date
+        }
     },
     {
         timestamps:true
