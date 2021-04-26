@@ -43,7 +43,7 @@ module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.session.user,
+        creator:req.session.user
     }
     let postId;
     Post.create(post)
@@ -55,10 +55,6 @@ module.exports.postCreate=(req,res,next)=>{
     .then(user=>{
         user.posts.push(postId);
         return user.save();
-    })
-    .then(result=>{
-        creator.posts.push(result);
-        return creator.save();
     })
     .then(udata=>{
         res.redirect('/');

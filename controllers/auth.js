@@ -70,7 +70,7 @@ module.exports.postLogin=(req,res,next)=>{
     .then(datas=>{
         if(typeof datas!=='undefined'){
             if(datas===true){
-                req.session.user=user._id
+                req.session.user=user._id;
                 req.session.isLoggedIn=true;
                 res.redirect('/');
             }

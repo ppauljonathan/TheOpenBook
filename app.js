@@ -37,10 +37,6 @@ app.set('view engine','ejs');
 
 app.set('views','./views');
 
-app.use(isAuth.clearSessions);
-
-app.use(isAuth.assignUser);
-
 app.use(routes);
 app.use(authRoutes);
 
