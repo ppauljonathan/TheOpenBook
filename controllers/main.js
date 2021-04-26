@@ -151,3 +151,61 @@ module.exports.postDeletePost=(req,res,next)=>{
         next(err);
     })
 }
+
+module.exports.postUpvote=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
+    .then(post=>{
+        const index=post.upvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        const bindex=post.downvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        if(index===-1){
+            if(bindex!==-1){
+                post.downvoters.splice(bindex,1);
+            }
+            post.upvoters.push(req.session.user);
+        }
+        else{
+            post.upvoters.splice(bindex,1);
+        }
+        return post.save();
+    })
+    .then(saved=>{
+        res.redirect('/post/'+req.params.postId);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.postDownvote=(req,res,next)=>{
+    Post
+    .findById(req.params.postId)
+    .then(post=>{
+        const index=post.downvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        const bindex=post.upvoters.findIndex(user=>{
+            return user.toString()===req.session.user.toString();
+        });
+        if(index===-1){
+            if(bindex!==-1){
+                post.upvoters.splice(bindex,1);
+            }
+            post.downvoters.push(req.session.user);
+        }
+        else{
+            post.downvoters.splice(index,1);
+        }
+        return post.save()
+    })
+    .then(saved=>{
+        res.redirect('/post/'+req.params.postId);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}

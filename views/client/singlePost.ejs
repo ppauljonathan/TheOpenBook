@@ -3,6 +3,15 @@
 <%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
 <main class="main">
     <div class="wrapper">
+        <%if(isLoggedIn){%>
+            <form action="/upvote/<%=post._id%>" method="post" class="delete-post-form">
+                <button type="submit" class="up">&uarr;</button>
+            </form>
+            <div class="num"><%=post.upvoters.length-post.downvoters.length%></div>
+            <form action="/downvote/<%=post._id%>" method="post" class="delete-post-form">
+                <button type="submit" class="down">&darr;</button>
+            </form>
+        <%}%>
         <div class="heading"><%=post.heading%></div>
         <div class="post-authour">By <%=post.creator.username%></div>
         <%if(typeof user!=='undefined'&&user.toString()===post.creator._id.toString()){%>

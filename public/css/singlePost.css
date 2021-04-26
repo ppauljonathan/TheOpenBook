@@ -59,3 +59,29 @@
     top: 15vh;
     left: 84vw;
 }
+
+.num{
+    position: absolute;
+    top:10vh;
+    left: 40vw;
+    z-index: 10;
+    width: fit-content;
+    height: fit-content;
+}
+
+.up{
+    width: 0%;
+    height: 0%;
+    top: 8vh;
+    left: 35vw;
+    z-index: 10;
+    font-size: 4vh;
+}
+
+.down{
+    width: 0%;
+    height: 0%;
+    top:8vh;
+    left:45vw;
+    font-size: 4vh;
+}

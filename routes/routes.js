@@ -30,7 +30,10 @@ router.post(
     mainController.postEditPost
 );
 
-router.post('/delete-post/:postId',isAuth,mainController.postDeletePost)
+router.post('/delete-post/:postId',isAuth,mainController.postDeletePost);
+
+router.post('/upvote/:postId',isAuth,mainController.postUpvote);
+router.post('/downvote/:postId',isAuth,mainController.postDownvote);
 
 router.get('/profile',isAuth,mainController.getProfile);
 
