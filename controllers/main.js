@@ -89,7 +89,7 @@ module.exports.getProfile=(req,res,next)=>{
     .then(user=>{
         return res.render('client/profile',{
             title:'Profile',
-            isLoggedIn:req.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn,
             user:user
         })
     })
