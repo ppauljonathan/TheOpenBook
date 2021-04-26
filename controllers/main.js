@@ -40,10 +40,13 @@ module.exports.getCreate=(req,res,next)=>{
 }
 
 module.exports.postCreate=(req,res,next)=>{
+    const oldDate=new Date();
+    const newDate=new Date(oldDate.getTime()+0.15*60000);
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.session.user
+        creator:req.session.user,
+        expiresAt:newDate
     }
     let postId;
     Post.create(post)

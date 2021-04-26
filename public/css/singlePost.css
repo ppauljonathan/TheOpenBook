@@ -2,7 +2,7 @@
     position: relative;
     width: 90%;height: fit-content;
     margin: auto;
-    border: 2px solid white;
+    border: 2px solid #333;
     border-radius: 5px;
     padding: 2rem;
 }
@@ -36,13 +36,13 @@
 }
 
 .post-authour{
-    top:15%;
+    top:4vh;
     right: 3%;
     height: 20%;
     width: fit-content;
 }
 
 .edit-post{
-    top: 25%;
+    top: 8vh;
     right: 3%;
 }

@@ -5,7 +5,7 @@
     <div class="wrapper">
         <div class="heading"><%=post.heading%></div>
         <div class="post-authour">By <%=post.creator.username%></div>
-        <%if(user.toString()===post.creator._id.toString()){%>
+        <%if(typeof user!=='undefined'&&user.toString()===post.creator._id.toString()){%>
             <a href="/edit-post/<%=post._id%>" class="button edit-post">Edit</a>    
         <%}%>
         <div class="content"><%=post.content%></div>
