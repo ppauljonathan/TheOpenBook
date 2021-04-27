@@ -134,12 +134,12 @@ module.exports.postSignup=(req,res,next)=>{
     })
     .then(hashedpwd=>{
         if(typeof hashedpwd!=='undefined'){
-            const user=new User({
+            return User
+            .create({
                 email:email,
                 username:username,
                 password:hashedpwd
             });
-            return user.save();
         }
     })
     .then(d=>{
