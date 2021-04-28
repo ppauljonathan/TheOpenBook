@@ -66,15 +66,27 @@ module.exports.postCreate=(req,res,next)=>{
 
 module.exports.getSinglePost=(req,res,next)=>{
     const postId=req.params.postId;
+    let userToPost='none'
     Post
     .findById(postId)
     .populate('creator')
     .then(post=>{
+        for(let i=0;i<post.upvoters.length;i++){
+            if(post.upvoters[i].toString()===req.session.user.toString()){
+                userToPost='upvoter';
+            }
+        }
+        for(let i=0;i<post.downvoters.length;i++){
+            if(post.downvoters[i].toString()===req.session.user.toString()){
+                userToPost='downvoter';
+            }
+        }
         res.render('client/singlePost',{
             title:'Reading Mode',
             post:post,
             isLoggedIn:req.session.isLoggedIn,
-            user:req.session.user
+            user:req.session.user,
+            userToPost:userToPost
         })
     })
     .catch(err=>{

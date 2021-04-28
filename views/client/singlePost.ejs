@@ -5,11 +5,11 @@
     <div class="wrapper">
         <%if(isLoggedIn){%>
             <form action="/upvote/<%=post._id%>" method="post" class="delete-post-form">
-                <button type="submit" class="up">&uarr;</button>
+                <button type="submit" class="up <%if(userToPost==='upvoter'){%>upac<%}else{%><%}%>">&uarr;</button>
             </form>
-            <div class="num"><%=post.upvoters.length-post.downvoters.length%></div>
+            <div class="num <%if(userToPost==='upvoter'){%>upac<%}else if(userToPost==='downvoter'){%>downac<%}else{%><%}%>"><%=post.upvoters.length-post.downvoters.length%></div>
             <form action="/downvote/<%=post._id%>" method="post" class="delete-post-form">
-                <button type="submit" class="down">&darr;</button>
+                <button type="submit" class="down <%if(userToPost==='downvoter'){%>downac<%}else{%><%}%>">&darr;</button>
             </form>
         <%}%>
         <div class="heading"><%=post.heading%></div>
