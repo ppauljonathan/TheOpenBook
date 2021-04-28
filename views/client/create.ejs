@@ -6,6 +6,7 @@
         action="<%if(title==='New Post'){%>/create<%}%><%if(title==='Edit Mode'){%>/edit-post/<%=oldpost._id.toString()%><%}%>" 
         method="post" 
         class="form centered"
+        enctype="multipart/form-data"
     >
         <label for="heading" class="heading-label">Title</label>
         <input
@@ -14,6 +15,8 @@
             class="heading"
             value="<%if(typeof oldpost!=='undefined'){%><%=oldpost.heading%><%}%>"
         >
+        <label for="image" class="image-label">Image</label>
+        <input type="file" name="image" class="image">
         <label for="content" class="content-label">Content</label>
         <textarea name="content" class="content">
             <%if(typeof oldpost!=='undefined'){%><%=oldpost.content%><%}%>

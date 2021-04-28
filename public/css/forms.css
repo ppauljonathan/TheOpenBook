@@ -2,14 +2,14 @@
     top:40vh;
     left: 50%;
     width: 85vw;
-    height: 75vh;
+    height: 80vh;
     border: 2px solid #333;
 }
 
 .heading{
     width: 40vw;
     height: 4vh;
-    top:15%;
+    top:10%;
     left: 5%;
     font-size: 4vh;
 }
@@ -23,7 +23,7 @@
 }
 
 .content{
-    top:40%;
+    top:25%;
     left:5%;
     width: 90%;
     height: 40%;
@@ -34,7 +34,7 @@
 .content-label{
     width: fit-content;
     height: fit-content;
-    top:30%;
+    top:18%;
     left: 5%;
     font-size: 4vh;
 }
@@ -138,4 +138,19 @@
 .already-not-message a{
     width: fit-content;
     height: fit-content;
+}
+
+.image-label{
+    left: 5%;
+    top:68%;
+    font-size: 4vh;
+    height: fit-content;
+    width: fit-content;
+}
+
+.image{
+    left: 5%;
+    top:75%;
+    height: 4vh;
+    width: 90%;
 }

@@ -43,7 +43,16 @@ module.exports.postCreate=(req,res,next)=>{
     const post={
         heading:req.body.heading,
         content:req.body.content,
-        creator:req.session.user
+        creator:req.session.user,
+    }
+    if(typeof req.file!=='undefined'){
+        const a=new Array();
+        a.push(...req.file.path.split('\\'));
+        for(let i=0;i<3;i++){a.shift();}
+        post.imageUrl='/'+a.join('/');
+    }
+    else{
+        post.imageUrl='/DEFAULT.jpg';
     }
     let postId;
     Post.create(post)

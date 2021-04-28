@@ -5,14 +5,34 @@ dotenv.config();
 const mongoose=require('mongoose');
 const session=require('express-session');
 const MongoStore=require('connect-mongodb-session')(session);
+const multer=require('multer');
+const {join}=require('path');
 
 
 const routes=require('./routes/routes');
 const authRoutes=require('./routes/auth');
 const errorHandlers=require('./controllers/errors');
-const isAuth=require('./middleware/isAuth');
 
 const MONGO_URI=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@theopenbook.q3gox.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+
+const fileStorage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,join(__dirname,'public','images'));
+    },
+    filename:(req,file,cb)=>{
+        cb(null,Date.now().toString()+'-'+file.originalname);
+    }
+});
+
+const fileFilter=(req,file,cb)=>{
+    if(
+        file.mimetype==='image/png'||
+        file.mimetype==='image/jpg'||
+        file.mimetype==='image/jpeg'||
+        file.mimetype==='image/bmp'
+    ){cb(null,true);}
+    else{cb(null,false);}
+}
 
 const store=new MongoStore({
     uri:MONGO_URI,
@@ -30,6 +50,8 @@ app.use(session({
 }))
 
 app.use(express.urlencoded({extended:true}));
+
+app.use(multer({storage:fileStorage,fileFilter:fileFilter}).single('image'));
 
 app.use(express.static('public'));
 

@@ -94,3 +94,10 @@
 .downac{
     color: rgb(0, 115, 150);
 }
+
+.post-image{
+    position: relative;
+    margin: 5%;
+    width:auto;
+    height: 30vh;
+}

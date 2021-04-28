@@ -21,7 +21,12 @@ const postSchema=new Schema({
     downvoters:[{
         type:mongoose.Types.ObjectId,
         ref:'User'
-    }]
+    }],
+    imageUrl:{
+        type:String,
+        required:true,
+        default:'/images/DEFAULT.jpg'
+    }
 });
 
 module.exports=mongoose.model('Post',postSchema);
