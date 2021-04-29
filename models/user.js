@@ -17,10 +17,6 @@ const userSchema=new Schema({
     posts:[{
         type:mongoose.Types.ObjectId,
         ref:'Post'
-    }],
-    favorites:[{
-        type:mongoose.Types.ObjectId,
-        ref:'Post'
     }]
 });
 
