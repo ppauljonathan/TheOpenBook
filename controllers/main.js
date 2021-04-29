@@ -1,6 +1,8 @@
 const Post=require('../models/post');
 const User=require('../models/user');
 
+const {deletePostImage}=require('../util/DPI');
+
 const ITEMS_PER_PAGE=3;
 
 module.exports.main=(req,res,next)=>{
@@ -120,13 +122,18 @@ module.exports.getProfile=(req,res,next)=>{
 }
 
 module.exports.getEditPost=(req,res,next)=>{
+    let op;
     Post
     .findById(req.params.postId)
     .then(oldpost=>{
+        op=oldpost;
+        return deletePostImage(op.imageUrl);
+    })
+    .then(dele=>{
         res.render('client/create',{
             title:'Edit Mode',
             isLoggedIn:req.session.isLoggedIn,
-            oldpost:oldpost
+            oldpost:op
         })
     })
     .catch();
@@ -138,6 +145,15 @@ module.exports.postEditPost=(req,res,next)=>{
     .then(post=>{
         post.heading=req.body.heading;
         post.content=req.body.content;
+        if(typeof req.file!=='undefined'){
+            const a=new Array();
+            a.push(...req.file.path.split('\\'));
+            for(let i=0;i<3;i++){a.shift();}
+            post.imageUrl='/'+a.join('/');
+        }
+        else{
+            post.imageUrl='/DEFAULT.jpg';
+        }
         return post.save();
     })
     .then(saved=>{
@@ -150,11 +166,16 @@ module.exports.postEditPost=(req,res,next)=>{
 
 module.exports.postDeletePost=(req,res,next)=>{
     const postId=req.params.postId;
+    let cre;
     Post
     .findByIdAndDelete(postId)
     .then(post=>{
+        cre=post.creator.toString();
+        return deletePostImage(post.imageUrl);
+    })
+    .then(dele=>{
         return User
-        .findById(post.creator.toString());
+        .findById(cre);
     })
     .then(user=>{
         for(let i=0;i<user.posts.length;i++){
