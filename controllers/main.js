@@ -37,13 +37,14 @@ module.exports.main=(req,res,next)=>{
 module.exports.getCreate=(req,res,next)=>{
     res.render('client/create',{
         title:'New Post',
-        isLoggedIn:req.session.isLoggedIn
+        isLoggedIn:req.session.isLoggedIn,
+        csrfToken:req.csrfToken
     })
 }
 
 module.exports.postCreate=(req,res,next)=>{
     const oldDate=new Date();
-    const newDate=new Date(oldDate.getDate()+parseInt(14));
+    const newDate=new Date(oldDate.getTime()+60000*60*24*14);
     const post={
         heading:req.body.heading,
         content:req.body.content,
@@ -100,7 +101,8 @@ module.exports.getSinglePost=(req,res,next)=>{
             post:post,
             isLoggedIn:req.session.isLoggedIn,
             user:req.session.user,
-            userToPost:userToPost
+            userToPost:userToPost,
+            csrfToken:req.csrfToken
         })
     })
     .catch(err=>{
@@ -136,7 +138,8 @@ module.exports.getEditPost=(req,res,next)=>{
         res.render('client/create',{
             title:'Edit Mode',
             isLoggedIn:req.session.isLoggedIn,
-            oldpost:op
+            oldpost:op,
+            csrfToken:req.csrfToken
         })
     })
     .catch();

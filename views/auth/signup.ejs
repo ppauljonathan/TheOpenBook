@@ -17,6 +17,8 @@
         <input name="confirmPassword" class="signup-password-confirm" type="password">
 
         <button class="button" type="submit">Signup</button>
+        
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
     </form>
     <p class="already-not-message">Already a member? &nbsp;<a href="/login">Login</a></p>
     <%if(errors.length!=0){%>

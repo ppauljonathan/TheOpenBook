@@ -7,7 +7,8 @@ const session=require('express-session');
 const MongoStore=require('connect-mongodb-session')(session);
 const multer=require('multer');
 const {join}=require('path');
-
+const csrf=require('csurf');
+const csrfProtection=csrf();
 
 const routes=require('./routes/routes');
 const authRoutes=require('./routes/auth');

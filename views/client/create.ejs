@@ -23,6 +23,8 @@
         </textarea>
         <button type="reset" class="button reset">reset</button>
         <button type="submit" class="button submit">submit</button>
+        
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
     </form>
 </main>
 <%-include('../includes/tail')%>
