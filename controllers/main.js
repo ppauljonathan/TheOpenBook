@@ -42,10 +42,13 @@ module.exports.getCreate=(req,res,next)=>{
 }
 
 module.exports.postCreate=(req,res,next)=>{
+    const oldDate=new Date();
+    const newDate=new Date(oldDate.getDate()+parseInt(14));
     const post={
         heading:req.body.heading,
         content:req.body.content,
         creator:req.session.user,
+        expires:newDate
     }
     if(typeof req.file!=='undefined'){
         const a=new Array();

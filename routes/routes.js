@@ -3,8 +3,10 @@ const {body}=require('express-validator');
 
 const mainController=require('../controllers/main');
 const {isAuth}=require('../middleware/isAuth');
+const {deleteOldPosts:DOP}=require('../middleware/deleteOldPosts');
 
-router.get('/',mainController.main);
+
+router.get('/',DOP,mainController.main);
 
 router.get('/post/:postId',mainController.getSinglePost)
 

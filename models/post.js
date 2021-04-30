@@ -26,6 +26,9 @@ const postSchema=new Schema({
         type:String,
         required:true,
         default:'/images/DEFAULT.jpg'
+    },
+    expires:{
+        type:Date
     }
 });
 
