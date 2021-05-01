@@ -10,7 +10,7 @@ module.exports.getLogin=(req,res,next)=>{
         title:'Login',
         errors:[],
         isLoggedIn:req.session.isLoggedIn,
-        csrfToken:req.csrfToken
+        csrfToken:req.csrfToken()
     })
 }
 
@@ -25,7 +25,7 @@ module.exports.postLogin=(req,res,next)=>{
                 title:'Login',
                 errors:[{msg:'E-mail Or Username Incorrect'}],
                 isLoggedIn:req.session.isLoggedIn,
-                csrfToken:req.csrfToken
+                csrfToken:req.csrfToken()
             })
         }
         else{
@@ -46,7 +46,7 @@ module.exports.postLogin=(req,res,next)=>{
                     title:'Login',
                     errors:[{msg:'Password Incorrect'}],
                     isLoggedIn:req.session.isLoggedIn,
-                    csrfToken:req.csrfToken
+                    csrfToken:req.csrfToken()
                 });
             }
         }
@@ -59,7 +59,7 @@ module.exports.getSignup=(req,res,next)=>{
         title:'Signup',
         errors:[],
         isLoggedIn:req.session.isLoggedIn,
-        csrfToken:req.csrfToken
+        csrfToken:req.csrfToken()
     })
 }
 
@@ -70,7 +70,7 @@ module.exports.postSignup=(req,res,next)=>{
             title:'Signup',
             errors:errors.array({onlyFirstError:true}),
             isLoggedIn:req.session.isLoggedIn,
-            csrfToken:req.csrfToken
+            csrfToken:req.csrfToken()
         })
     }
     const email=req.body.email;
@@ -84,7 +84,7 @@ module.exports.postSignup=(req,res,next)=>{
                 title:'Signup',
                 errors:[{msg:'email already in use'}],
                 isLoggedIn:req.session.isLoggedIn,
-                csrfToken:req.csrfToken
+                csrfToken:req.csrfToken()
             })
         }
         return User
@@ -97,7 +97,7 @@ module.exports.postSignup=(req,res,next)=>{
                     title:'Signup',
                     errors:[{msg:'username already in use'}],
                     isLoggedIn:req.session.isLoggedIn,
-                    csrfToken:req.csrfToken
+                    csrfToken:req.csrfToken()
                 })
             }
             return bcrypt
@@ -118,6 +118,56 @@ module.exports.postSignup=(req,res,next)=>{
         if(typeof d!=='undefined'){
             res.redirect('/login');
         }
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.getReset=(req,res,next)=>{
+    res.render('auth/signup',{
+        title:'Reset Password',
+        errors:[],
+        isLoggedIn:req.isLoggedIn,
+        csrfToken:req.csrfToken()
+    });
+}
+
+module.exports.postReset=(req,res,next)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.render('auth/signup',{
+            title:'Reset Password',
+            errors:errors.array({onlyFirstError:true}),
+            isLoggedIn:req.session.isLoggedIn,
+            csrfToken:req.csrfToken()
+        })
+    }
+    let user;
+    checkEmailAndUsername(req.body.emailOrUsername)
+    .then(data=>{
+        if(data==='unsuccessful'){
+            return res.render('auth/signup',{
+                title:'Reset Password',
+                errors:[{msg:'Email Or Username Incorrect'}],
+                isLoggedIn:req.session.isLoggedIn,
+                csrfToken:req.csrfToken()
+            })
+        }
+        else{
+            user=data[0];
+            return bcrypt
+            .hash(req.body.password,12)
+        }
+    })
+    .then(hashedpwd=>{
+        if(typeof hashedpwd!=='undefined'){
+            user.password=hashedpwd;
+            return user.save();
+        }
+    })
+    .then(savedUser=>{
+        res.redirect('/login');
     })
     .catch(err=>{
         next(err);

@@ -2,13 +2,17 @@
 <%-include('../includes/header')%>
 <%-include('../includes/navbar',{title,title:isLoggedIn,isLoggedIn})%>
 <main class="main">
-    <form class="centered signup"action="/signup" method="post">
-
+    <form class="centered signup"action="<%if(title==='Signup'){%>/signup<%}else if(title==='Reset Password'){%>/reset-pwd<%}%>" method="post">
+        <%if(title==='Signup'){%>
         <label class="email-label" for="email">E-mail</label>
         <input name="email" class="signup-email"type="text">
 
         <label class="username-label" for="username">Username</label>
         <input name="username" class="signup-username" type="text">
+        <%}else if(title==='Reset Password'){%>
+        <label class="email-label" for="emailOrUsername">E-mail or Username</label>
+        <input name="emailOrUsername" class="signup-email"type="text">
+        <%}%>
 
         <label class="password-label" for="password">Password</label>
         <input name="password" class="signup-password" type="password">
@@ -20,7 +24,9 @@
         
         <input type="hidden" name="_csrf" value="<%=csrfToken%>">
     </form>
+    <%if(title==='Signup'){%>
     <p class="already-not-message">Already a member? &nbsp;<a href="/login">Login</a></p>
+    <%}%>
     <%if(errors.length!=0){%>
         <p class="errorMsg">ERR:&nbsp;<%=errors[0].msg%></p>
     <%}%>
