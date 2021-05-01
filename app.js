@@ -60,12 +60,17 @@ app.set('view engine','ejs');
 
 app.set('views','./views');
 
+
+app.use(csrfProtection);
+
 app.use(routes);
 app.use(authRoutes);
+
 
 app.use(errorHandlers.get404);
 
 app.use(errorHandlers.get500);
+
 
 mongoose
 .connect(

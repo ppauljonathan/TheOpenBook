@@ -38,7 +38,7 @@ module.exports.getCreate=(req,res,next)=>{
     res.render('client/create',{
         title:'New Post',
         isLoggedIn:req.session.isLoggedIn,
-        csrfToken:req.csrfToken
+        csrfToken:req.csrfToken()
     })
 }
 
@@ -102,7 +102,7 @@ module.exports.getSinglePost=(req,res,next)=>{
             isLoggedIn:req.session.isLoggedIn,
             user:req.session.user,
             userToPost:userToPost,
-            csrfToken:req.csrfToken
+            csrfToken:req.csrfToken()
         })
     })
     .catch(err=>{
@@ -139,7 +139,7 @@ module.exports.getEditPost=(req,res,next)=>{
             title:'Edit Mode',
             isLoggedIn:req.session.isLoggedIn,
             oldpost:op,
-            csrfToken:req.csrfToken
+            csrfToken:req.csrfToken()
         })
     })
     .catch();

@@ -42,4 +42,24 @@ router.post(
     authControllers.postSignup
 );
 
+router.get('/reset-pwd',remAuth,authControllers.getReset);
+router.post(
+    '/reset-pwd',
+    [
+        body('password')
+        .trim()
+        .isLength({min:5})
+        .withMessage("password too short"),
+        body('confirmPassword')
+        .trim()
+        .custom((val,{req})=>{
+            if(val.toString()!==req.body.password.toString()){
+                return Promise.reject("passwords do not match");
+            }
+            return true;
+        })
+    ],
+    authControllers.postReset
+)
+
 module.exports=router;
