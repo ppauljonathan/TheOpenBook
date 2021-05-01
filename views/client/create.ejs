@@ -17,6 +17,7 @@
         >
         <label for="image" class="image-label">Image</label>
         <input type="file" name="image" class="image">
+        <img class="preveiw">
         <label for="content" class="content-label">Content</label>
         <textarea name="content" class="content">
             <%if(typeof oldpost!=='undefined'){%><%=oldpost.content%><%}%>
@@ -26,5 +27,6 @@
         
         <input type="hidden" name="_csrf" value="<%=csrfToken%>">
     </form>
+    <script src="/js/imagePreveiw.js"></script>
 </main>
 <%-include('../includes/tail')%>

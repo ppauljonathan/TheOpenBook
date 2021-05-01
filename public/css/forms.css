@@ -154,3 +154,12 @@
     height: 4vh;
     width: 90%;
 }
+
+.preveiw{
+    width: auto;
+    padding: 0.2%;
+    height: 15%;
+    color: red;
+    left:40%;
+    top:80%;
+}
