@@ -1,5 +1,8 @@
 const {validationResult}=require('express-validator');
 const bcrypt=require('bcryptjs');
+require('dotenv').config();
+const sgMail=require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const User=require('../models/user');
 
@@ -110,12 +113,26 @@ module.exports.postSignup=(req,res,next)=>{
             .create({
                 email:email,
                 username:username,
-                password:hashedpwd
+                password:hashedpwd,
+                isConfirmed:false
             });
         }
     })
     .then(d=>{
         if(typeof d!=='undefined'){
+            sgMail.send({
+                to:email,
+                from:'nodejsappdevops@gmail.com',
+                subject:'register your email',
+                html:`
+                    <form method="post" action= ${process.env.CONF_ACTION}/conf-user/>
+                        <input type="hidden" name="email" value=${email}>
+                        <button type="submit">Verify Email</button>
+                    </form>
+                `
+            })
+            .then(()=>{console.log("sent to "+email);})
+            .catch(err=>{console.log(err);})
             res.redirect('/login');
         }
     })
@@ -167,6 +184,22 @@ module.exports.postReset=(req,res,next)=>{
         }
     })
     .then(savedUser=>{
+        res.redirect('/login');
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.postConfirm=(req,res,next)=>{
+    const email=req.body.email;
+    User
+    .find({email:email})
+    .then(user=>{
+        user[0].isConfirmed=true;
+        return user[0].save()
+    })
+    .then(saved=>{
         res.redirect('/login');
     })
     .catch(err=>{

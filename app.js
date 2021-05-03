@@ -13,6 +13,7 @@ const csrfProtection=csrf();
 const routes=require('./routes/routes');
 const authRoutes=require('./routes/auth');
 const errorHandlers=require('./controllers/errors');
+const {postConfirm}=require('./controllers/auth');
 
 const MONGO_URI=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@theopenbook.q3gox.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
@@ -60,6 +61,8 @@ app.set('view engine','ejs');
 
 app.set('views','./views');
 
+
+app.post('/conf-user',postConfirm);
 
 app.use(csrfProtection);
 
