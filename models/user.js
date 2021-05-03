@@ -17,7 +17,8 @@ const userSchema=new Schema({
     posts:[{
         type:mongoose.Types.ObjectId,
         ref:'Post'
-    }]
+    }],
+    isConfirmed:Boolean
 });
 
 module.exports=mongoose.model('User',userSchema);

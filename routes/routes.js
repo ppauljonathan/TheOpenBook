@@ -4,16 +4,18 @@ const {body}=require('express-validator');
 const mainController=require('../controllers/main');
 const {isAuth}=require('../middleware/isAuth');
 const {deleteOldPosts:DOP}=require('../middleware/deleteOldPosts');
+const {isConf}=require('../middleware/isConf');
 
 
 router.get('/',DOP,mainController.main);
 
 router.get('/post/:postId',mainController.getSinglePost)
 
-router.get('/create',isAuth,mainController.getCreate);
+router.get('/create',isAuth,isConf,mainController.getCreate);
 router.post(
     '/create',
     isAuth,
+    isConf,
     [
         body('heading').trim(),
         body('content').trim()
