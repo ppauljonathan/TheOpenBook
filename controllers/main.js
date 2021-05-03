@@ -1,9 +1,12 @@
+const os=require('os');
+
 const Post=require('../models/post');
 const User=require('../models/user');
 
 const {deletePostImage}=require('../util/DPI');
 
 const ITEMS_PER_PAGE=3;
+const OSTYPE=os.type();
 
 module.exports.main=(req,res,next)=>{
     const pageNo=req.query.page||1;
@@ -53,8 +56,22 @@ module.exports.postCreate=(req,res,next)=>{
     }
     if(typeof req.file!=='undefined'){
         const a=new Array();
-        a.push(...req.file.path.split('\\'));
-        for(let i=0;i<3;i++){a.shift();}
+        if(OSTYPE==='Windows_NT'){
+            a.push(...req.file.path.split('\\'));
+        }
+        else{
+            a.push(...req.file.path.split('/'));
+        }
+        let position;
+        for(let i=0;i<a.length;i++){
+            if(a[i]==='images'){
+                position=i;
+                break;
+            }
+        }
+        for(let i=0;i<position;i++){
+            a.shift();
+        }
         post.imageUrl='/'+a.join('/');
     }
     else{
@@ -153,8 +170,22 @@ module.exports.postEditPost=(req,res,next)=>{
         post.content=req.body.content;
         if(typeof req.file!=='undefined'){
             const a=new Array();
-            a.push(...req.file.path.split('\\'));
-            for(let i=0;i<3;i++){a.shift();}
+            if(OSTYPE==='Windows_NT'){
+                a.push(...req.file.path.split('\\'));
+            }
+            else{
+                a.push(...req.file.path.split('/'));
+            }
+            let position;
+            for(let i=0;i<a.length;i++){
+                if(a[i]==='images'){
+                    position=i;
+                    break;
+                }
+            }
+            for(let i=0;i<position;i++){
+                a.shift();
+            }
             post.imageUrl='/'+a.join('/');
         }
         else{
