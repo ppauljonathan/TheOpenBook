@@ -1,0 +1,19 @@
+.otp{
+    width: 50vw;
+    height: 20vh;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.otp-in{
+    width: 90%;
+    height: 30%;
+    left: 5%;
+    top:10%;
+}
+
+.otp-sub{
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+}

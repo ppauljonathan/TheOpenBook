@@ -1,0 +1,11 @@
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
+<main>
+    <form action="/otp" method="post" class="centered otp">
+        <input type="text" name="otp" class="otp-in" placeholder="Please Enter the OTP sent to your email">
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+        <button class="button otp-sub" type="submit">Submit</button>
+    </form>
+</main>
+<%-include('../includes/tail')%>

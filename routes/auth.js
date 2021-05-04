@@ -62,4 +62,7 @@ router.post(
     authControllers.postReset
 )
 
+router.get('/otp',authControllers.getOTP);
+router.post('/otp',authControllers.postOTP);
+
 module.exports=router;

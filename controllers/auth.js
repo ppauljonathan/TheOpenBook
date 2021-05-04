@@ -7,6 +7,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const User=require('../models/user');
 
 const {checkEmailAndUsername}=require('../util/CEAU');
+const {otpGen}=require('../util/OTP');
 
 module.exports.getLogin=(req,res,next)=>{
     res.render('auth/login',{
@@ -67,6 +68,7 @@ module.exports.getSignup=(req,res,next)=>{
 }
 
 module.exports.postSignup=(req,res,next)=>{
+    const otp=otpGen();
     const errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.render('auth/signup',{
@@ -114,7 +116,8 @@ module.exports.postSignup=(req,res,next)=>{
                 email:email,
                 username:username,
                 password:hashedpwd,
-                isConfirmed:false
+                isConfirmed:false,
+                OTP:otp
             });
         }
     })
@@ -123,17 +126,14 @@ module.exports.postSignup=(req,res,next)=>{
             sgMail.send({
                 to:email,
                 from:'nodejsappdevops@gmail.com',
-                subject:'register your email',
+                subject:'verify your email',
                 html:`
-                    <form method="post" action= ${process.env.CONF_ACTION}/conf-user/>
-                        <input type="hidden" name="email" value=${email}>
-                        <button type="submit">Verify Email</button>
-                    </form>
+                    <p>Please enter this OTP <br>${otp}<br>on the prompt to verify your email</p>
                 `
             })
             .then(()=>{console.log("sent to "+email);})
             .catch(err=>{console.log(err);})
-            res.redirect('/login');
+            res.redirect('/otp');
         }
     })
     .catch(err=>{
@@ -191,16 +191,32 @@ module.exports.postReset=(req,res,next)=>{
     })
 }
 
-module.exports.postConfirm=(req,res,next)=>{
-    const email=req.body.email;
+module.exports.getOTP=(req,res,next)=>{
+    res.render('auth/otp',{
+        title:'OTP',
+        isLoggedIn:req.session.isLoggedIn,
+        csrfToken:req.csrfToken()
+    })
+}
+
+module.exports.postOTP=(req,res,next)=>{
+    const otp=req.body.otp;
     User
-    .find({email:email})
+    .findOne({OTP:otp})
     .then(user=>{
-        user[0].isConfirmed=true;
-        return user[0].save()
+        if(typeof user==='undefined'||!user){
+            return res.redirect('/otp');
+        }
+        if(!user.isConfirmed){
+            user.isConfirmed=true;
+        }
+        return user.save();
     })
     .then(saved=>{
-        res.redirect('/login');
+        if(typeof saved!=='undefined')
+        {
+            res.redirect('/login');
+        }
     })
     .catch(err=>{
         next(err);

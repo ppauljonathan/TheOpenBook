@@ -18,7 +18,8 @@ const userSchema=new Schema({
         type:mongoose.Types.ObjectId,
         ref:'Post'
     }],
-    isConfirmed:Boolean
+    isConfirmed:Boolean,
+    OTP:Number
 });
 
 module.exports=mongoose.model('User',userSchema);
