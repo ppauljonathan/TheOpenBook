@@ -13,7 +13,7 @@ module.exports.getLogin=(req,res,next)=>{
     res.render('auth/login',{
         title:'Login',
         errors:[],
-        isLoggedIn:req.session.isLoggedIn,
+        isLoggedIn:req.session.isLoggedIn||false,
         csrfToken:req.csrfToken()
     })
 }
@@ -28,7 +28,7 @@ module.exports.postLogin=(req,res,next)=>{
             return res.render('auth/login',{
                 title:'Login',
                 errors:[{msg:'E-mail Or Username Incorrect'}],
-                isLoggedIn:req.session.isLoggedIn,
+                isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken()
             })
         }
@@ -49,7 +49,7 @@ module.exports.postLogin=(req,res,next)=>{
                 res.render('auth/login',{
                     title:'Login',
                     errors:[{msg:'Password Incorrect'}],
-                    isLoggedIn:req.session.isLoggedIn,
+                    isLoggedIn:req.session.isLoggedIn||false,
                     csrfToken:req.csrfToken()
                 });
             }
@@ -62,7 +62,7 @@ module.exports.getSignup=(req,res,next)=>{
     res.render('auth/signup',{
         title:'Signup',
         errors:[],
-        isLoggedIn:req.session.isLoggedIn,
+        isLoggedIn:req.session.isLoggedIn||false,
         csrfToken:req.csrfToken()
     })
 }
@@ -74,7 +74,7 @@ module.exports.postSignup=(req,res,next)=>{
         return res.render('auth/signup',{
             title:'Signup',
             errors:errors.array({onlyFirstError:true}),
-            isLoggedIn:req.session.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn||false,
             csrfToken:req.csrfToken()
         })
     }
@@ -88,7 +88,7 @@ module.exports.postSignup=(req,res,next)=>{
             return res.render('auth/signup',{
                 title:'Signup',
                 errors:[{msg:'email already in use'}],
-                isLoggedIn:req.session.isLoggedIn,
+                isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken()
             })
         }
@@ -101,7 +101,7 @@ module.exports.postSignup=(req,res,next)=>{
                 return res.render('auth/signup',{
                     title:'Signup',
                     errors:[{msg:'username already in use'}],
-                    isLoggedIn:req.session.isLoggedIn,
+                    isLoggedIn:req.session.isLoggedIn||false,
                     csrfToken:req.csrfToken()
                 })
             }
@@ -156,7 +156,7 @@ module.exports.postReset=(req,res,next)=>{
         return res.render('auth/signup',{
             title:'Reset Password',
             errors:errors.array({onlyFirstError:true}),
-            isLoggedIn:req.session.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn||false,
             csrfToken:req.csrfToken()
         })
     }
@@ -167,7 +167,7 @@ module.exports.postReset=(req,res,next)=>{
             return res.render('auth/signup',{
                 title:'Reset Password',
                 errors:[{msg:'Email Or Username Incorrect'}],
-                isLoggedIn:req.session.isLoggedIn,
+                isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken()
             })
         }
@@ -194,7 +194,7 @@ module.exports.postReset=(req,res,next)=>{
 module.exports.getOTP=(req,res,next)=>{
     res.render('auth/otp',{
         title:'OTP',
-        isLoggedIn:req.session.isLoggedIn,
+        isLoggedIn:req.session.isLoggedIn||false,
         csrfToken:req.csrfToken()
     })
 }

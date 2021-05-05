@@ -29,7 +29,7 @@ module.exports.main=(req,res,next)=>{
             currPage:pageNo,
             firstPage:1,
             lastPage:totalPage,
-            isLoggedIn:req.session.isLoggedIn
+            isLoggedIn:req.session.isLoggedIn||false
         })
     })
     .catch(err=>{
@@ -40,7 +40,7 @@ module.exports.main=(req,res,next)=>{
 module.exports.getCreate=(req,res,next)=>{
     res.render('client/create',{
         title:'New Post',
-        isLoggedIn:req.session.isLoggedIn,
+        isLoggedIn:req.session.isLoggedIn||false,
         csrfToken:req.csrfToken()
     })
 }
@@ -116,7 +116,7 @@ module.exports.getSinglePost=(req,res,next)=>{
         res.render('client/singlePost',{
             title:'Reading Mode',
             post:post,
-            isLoggedIn:req.session.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn||false,
             user:req.session.user,
             userToPost:userToPost,
             csrfToken:req.csrfToken()
@@ -134,7 +134,7 @@ module.exports.getProfile=(req,res,next)=>{
     .then(user=>{
         return res.render('client/profile',{
             title:'Profile',
-            isLoggedIn:req.session.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn||false,
             user:user
         })
     })
@@ -154,7 +154,7 @@ module.exports.getEditPost=(req,res,next)=>{
     .then(dele=>{
         res.render('client/create',{
             title:'Edit Mode',
-            isLoggedIn:req.session.isLoggedIn,
+            isLoggedIn:req.session.isLoggedIn||false,
             oldpost:op,
             csrfToken:req.csrfToken()
         })
