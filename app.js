@@ -9,6 +9,8 @@ const multer=require('multer');
 const {join}=require('path');
 const csrf=require('csurf');
 const csrfProtection=csrf();
+const compression=require('compression');
+const helmet=require('helmet');
 
 const routes=require('./routes/routes');
 const authRoutes=require('./routes/auth');
@@ -39,6 +41,10 @@ const store=new MongoStore({
     uri:MONGO_URI,
     collection:'sessions'
 })
+
+app.use(helmet());
+
+app.use(compression());
 
 app.use(session({
     secret:'mysupersupersecretsecret',
