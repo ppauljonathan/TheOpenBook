@@ -103,14 +103,16 @@ module.exports.getSinglePost=(req,res,next)=>{
     .findById(postId)
     .populate('creator')
     .then(post=>{
-        for(let i=0;i<post.upvoters.length;i++){
-            if(post.upvoters[i].toString()===req.session.user.toString()){
-                userToPost='upvoter';
+        if(typeof req.session.user!=='undefined'){
+            for(let i=0;i<post.upvoters.length;i++){
+                if(post.upvoters[i].toString()===req.session.user.toString()){
+                    userToPost='upvoter';
+                }
             }
-        }
-        for(let i=0;i<post.downvoters.length;i++){
-            if(post.downvoters[i].toString()===req.session.user.toString()){
-                userToPost='downvoter';
+            for(let i=0;i<post.downvoters.length;i++){
+                if(post.downvoters[i].toString()===req.session.user.toString()){
+                    userToPost='downvoter';
+                }
             }
         }
         res.render('client/singlePost',{
