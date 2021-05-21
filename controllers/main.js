@@ -57,7 +57,7 @@ module.exports.getCreate=(req,res,next)=>{
 
 module.exports.postCreate=(req,res,next)=>{
     const oldDate=new Date();
-    const newDate=new Date(oldDate.getTime()+60000*60*24*14);
+    const newDate=new Date(oldDate.getTime()+60000*60*24*7);
     const post={
         heading:req.body.heading,
         content:req.body.content,
