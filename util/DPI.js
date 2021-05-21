@@ -11,6 +11,9 @@ cloudinary.config({
 })
 
 module.exports.deletePostImage=(url)=>{
+    if(url==='/DEFAULT.jpg'){
+        return Promise.resolve(true);
+    }
     return cloudinary
     .uploader
     .destroy(url);

@@ -189,29 +189,20 @@ module.exports.postEditPost=(req,res,next)=>{
         post.heading=req.body.heading;
         post.content=req.body.content;
         if(typeof req.file!=='undefined'){
-            const a=new Array();
-            if(OSTYPE==='Windows_NT'){
-                a.push(...req.file.path.split('\\'));
-            }
-            else{
-                a.push(...req.file.path.split('/'));
-            }
-            let position;
-            for(let i=0;i<a.length;i++){
-                if(a[i]==='images'){
-                    position=i;
-                    break;
-                }
-            }
-            for(let i=0;i<position;i++){
-                a.shift();
-            }
-            post.imageUrl='/'+a.join('/');
+            cloudinary
+            .uploader
+            .upload(req.file.path)
+            .then(result=>{
+                post.imageUrl.secure_url=result.secure_url;
+                post.imageUrl.public_id=result.public_id;
+                return post.save();
+            })
         }
         else{
-            post.imageUrl='/DEFAULT.jpg';
+            post.imageUrl.secure_url='/DEFAULT.jpg';
+            post.imageUrl.public_id='nonameyet';
+            return post.save();
         }
-        return post.save();
     })
     .then(saved=>{
         res.redirect('/');
@@ -228,7 +219,7 @@ module.exports.postDeletePost=(req,res,next)=>{
     .findByIdAndDelete(postId)
     .then(post=>{
         cre=post.creator.toString();
-        return deletePostImage(post.imageUrl);
+        return deletePostImage(post.imageUrl.public_id);
     })
     .then(dele=>{
         return User
