@@ -1,15 +1,17 @@
 const {unlink}=require('fs');
 const {join}=require('path');
 
+const cloudinary=require('cloudinary').v2;
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET,
+    enhance_image_tag:true,
+    static_file_support:false
+})
+
 module.exports.deletePostImage=(url)=>{
-    return new Promise((resolve,reject)=>{
-        const a=url.split('/')
-        a.shift();
-        if(a[a.length-1]==='DEFAULT.jpg'){return resolve('default image no delete')}
-        const path=join(__dirname,'../','public',...a);
-        unlink(path,(err)=>{
-            if(err){return reject(err);}
-            resolve('deleted');
-        })
-    })
+    return cloudinary
+    .uploader
+    .destroy(url);
 }
