@@ -7,7 +7,7 @@ cloudinary.config({
     api_key:process.env.CLOUDINARY_API_KEY,
     api_secret:process.env.CLOUDINARY_API_SECRET,
     enhance_image_tag:true,
-    static_file_support:false
+    static_file_support:true
 })
 
 module.exports.deletePostImage=(url)=>{
