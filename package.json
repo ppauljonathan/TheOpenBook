@@ -29,6 +29,7 @@
   "dependencies": {
     "@sendgrid/mail": "^7.4.2",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.25.1",
     "compression": "^1.7.4",
     "connect-mongodb-session": "^2.4.1",
     "csurf": "^1.11.0",

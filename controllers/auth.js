@@ -209,6 +209,7 @@ module.exports.postOTP=(req,res,next)=>{
         }
         if(!user.isConfirmed){
             user.isConfirmed=true;
+            user.OTP=-9919;
         }
         return user.save();
     })

@@ -46,6 +46,14 @@ app.use(helmet());
 
 app.use(compression());
 
+app.use(function (req, res, next) {
+    res.setHeader(
+      'Content-Security-Policy',
+      "img-src 'self' https://* data:"
+    );
+    next();
+});
+
 app.use(session({
     secret:'mysupersupersecretsecret',
     resave:false,

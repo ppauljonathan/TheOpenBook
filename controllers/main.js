@@ -1,9 +1,19 @@
 const os=require('os');
+const {promises}=require('fs');
 
 const Post=require('../models/post');
 const User=require('../models/user');
 
 const {deletePostImage}=require('../util/DPI');
+
+const cloudinary=require('cloudinary').v2;
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET,
+    enhance_image_tag:true,
+    static_file_support:false
+})
 
 const ITEMS_PER_PAGE=3;
 const OSTYPE=os.type();
@@ -52,48 +62,56 @@ module.exports.postCreate=(req,res,next)=>{
         heading:req.body.heading,
         content:req.body.content,
         creator:req.session.user,
-        expires:newDate
-    }
+        expires:newDate,
+        imageUrl:{}
+    };
+    let postId;
     if(typeof req.file!=='undefined'){
-        const a=new Array();
-        if(OSTYPE==='Windows_NT'){
-            a.push(...req.file.path.split('\\'));
-        }
-        else{
-            a.push(...req.file.path.split('/'));
-        }
-        let position;
-        for(let i=0;i<a.length;i++){
-            if(a[i]==='images'){
-                position=i;
-                break;
-            }
-        }
-        for(let i=0;i<position;i++){
-            a.shift();
-        }
-        post.imageUrl='/'+a.join('/');
+        cloudinary
+        .uploader
+        .upload(req.file.path)
+        .then(result=>{
+            post.imageUrl.secure_url=result.secure_url;
+            post.imageUrl.public_id=result.public_id;
+            return promises.unlink(req.file.path);
+        })
+        .then(dele=>{
+            return Post.create(post)
+        })
+        .then(post=>{
+            postId=post._id;
+            return User
+            .findById(req.session.user);
+        })
+        .then(user=>{
+            user.posts.push(postId);
+            return user.save();
+        })
+        .then(udata=>{
+            res.redirect('/');
+        })
+        .catch(err=>{
+            next(err);
+        })
     }
     else{
-        post.imageUrl='/DEFAULT.jpg';
+        Post.create(post)
+        .then(post=>{
+            postId=post._id;
+            return User
+            .findById(req.session.user);
+        })
+        .then(user=>{
+            user.posts.push(postId);
+            return user.save();
+        })
+        .then(udata=>{
+            res.redirect('/');
+        })
+        .catch(err=>{
+            next(err);
+        })
     }
-    let postId;
-    Post.create(post)
-    .then(post=>{
-        postId=post._id;
-        return User
-        .findById(req.session.user);
-    })
-    .then(user=>{
-        user.posts.push(postId);
-        return user.save();
-    })
-    .then(udata=>{
-        res.redirect('/');
-    })
-    .catch(err=>{
-        next(err);
-    })
 }
 
 module.exports.getSinglePost=(req,res,next)=>{
@@ -151,7 +169,7 @@ module.exports.getEditPost=(req,res,next)=>{
     .findById(req.params.postId)
     .then(oldpost=>{
         op=oldpost;
-        return deletePostImage(op.imageUrl);
+        return deletePostImage(op.imageUrl.public_id);
     })
     .then(dele=>{
         res.render('client/create',{

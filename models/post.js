@@ -23,9 +23,16 @@ const postSchema=new Schema({
         ref:'User'
     }],
     imageUrl:{
-        type:String,
-        required:true,
-        default:'/images/DEFAULT.jpg'
+        secure_url:{    
+            type:String,
+            required:true,
+            default:'/DEFAULT.jpg'
+        },
+        public_id:{
+            type:String,
+            required:true,
+            default:'notnamed'
+        }
     },
     expires:{
         type:Date
