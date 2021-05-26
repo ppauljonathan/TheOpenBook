@@ -42,9 +42,9 @@ router.post(
     authControllers.postSignup
 );
 
-router.get('/reset-pwd',remAuth,authControllers.getReset);
+router.get('/reset-pwd/:token',remAuth,authControllers.getReset);
 router.post(
-    '/reset-pwd',
+    '/reset-pwd/:token',
     [
         body('password')
         .trim()
@@ -64,5 +64,9 @@ router.post(
 
 router.get('/otp',authControllers.getOTP);
 router.post('/otp',authControllers.postOTP);
+
+
+router.get('/reseter',remAuth,authControllers.getReseter);
+router.post('/reseter',remAuth,authControllers.postReseter);
 
 module.exports=router;

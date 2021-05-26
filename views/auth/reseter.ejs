@@ -1,0 +1,14 @@
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
+<main>
+    <form action="/reseter" method="post" class="centered otp">
+        <input type="text" name="otp" class="otp-in" placeholder="Please enter the email or username to reset Password">
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+        <button class="button otp-sub" type="submit">Submit</button>
+    </form>
+    <%if(errors.length!=0){%>
+        <p class="errorMsg">ERR:&nbsp;<%=errors[0].msg%></p>
+    <%}%>
+</main>
+<%-include('../includes/tail')%>

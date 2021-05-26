@@ -19,7 +19,11 @@ const userSchema=new Schema({
         ref:'Post'
     }],
     isConfirmed:Boolean,
-    OTP:Number
+    OTP:Number,
+    resetToken:String,
+    resetExp:{
+        type:Date
+    }
 });
 
 module.exports=mongoose.model('User',userSchema);

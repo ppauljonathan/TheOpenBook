@@ -1,3 +1,5 @@
+const crypto=require('crypto');
+
 const {validationResult}=require('express-validator');
 const bcrypt=require('bcryptjs');
 require('dotenv').config();
@@ -8,6 +10,7 @@ const User=require('../models/user');
 
 const {checkEmailAndUsername}=require('../util/CEAU');
 const {otpGen}=require('../util/OTP');
+const { type } = require('os');
 
 module.exports.getLogin=(req,res,next)=>{
     res.render('auth/login',{
@@ -146,7 +149,8 @@ module.exports.getReset=(req,res,next)=>{
         title:'Reset Password',
         errors:[],
         isLoggedIn:req.isLoggedIn,
-        csrfToken:req.csrfToken()
+        csrfToken:req.csrfToken(),
+        resetToken:req.params.token,
     });
 }
 
@@ -157,7 +161,8 @@ module.exports.postReset=(req,res,next)=>{
             title:'Reset Password',
             errors:errors.array({onlyFirstError:true}),
             isLoggedIn:req.session.isLoggedIn||false,
-            csrfToken:req.csrfToken()
+            csrfToken:req.csrfToken(),
+            resetToken:req.params.token
         })
     }
     let user;
@@ -168,11 +173,30 @@ module.exports.postReset=(req,res,next)=>{
                 title:'Reset Password',
                 errors:[{msg:'Email Or Username Incorrect'}],
                 isLoggedIn:req.session.isLoggedIn||false,
-                csrfToken:req.csrfToken()
+                csrfToken:req.csrfToken(),
+                resetToken:req.params.token
             })
         }
         else{
             user=data[0];
+            if(user.resetToken!==req.params.token){
+                return res.render('auth/signup',{
+                    title:'Reset Password',
+                    errors:[{msg:'Reset Token Incorrect'}],
+                    isLoggedIn:req.session.isLoggedIn||false,
+                    csrfToken:req.csrfToken(),
+                    resetToken:req.params.token
+                })
+            }
+            if(user.resetExp<Date.now()){
+                return res.render('auth/signup',{
+                    title:'Reset Password',
+                    errors:[{msg:'Reset Token Expired Please Initiate Reset Request Again'}],
+                    isLoggedIn:req.session.isLoggedIn||false,
+                    csrfToken:req.csrfToken(),
+                    resetToken:req.params.token
+                })
+            }
             return bcrypt
             .hash(req.body.password,12)
         }
@@ -184,7 +208,10 @@ module.exports.postReset=(req,res,next)=>{
         }
     })
     .then(savedUser=>{
-        res.redirect('/login');
+        if(typeof savedUser!=='undefined')
+        {
+            res.redirect('/login');
+        }
     })
     .catch(err=>{
         next(err);
@@ -195,7 +222,8 @@ module.exports.getOTP=(req,res,next)=>{
     res.render('auth/otp',{
         title:'OTP',
         isLoggedIn:req.session.isLoggedIn||false,
-        csrfToken:req.csrfToken()
+        csrfToken:req.csrfToken(),
+        errors:[]
     })
 }
 
@@ -205,7 +233,12 @@ module.exports.postOTP=(req,res,next)=>{
     .findOne({OTP:otp})
     .then(user=>{
         if(typeof user==='undefined'||!user){
-            return res.redirect('/otp');
+            return res.render('auth/otp',{
+                title:'OTP',
+                isLoggedIn:req.session.isLoggedIn||false,
+                csrfToken:req.csrfToken(),
+                errors:[{msg:'Please Enter The Correct 6-digit OTP'}]
+            })
         }
         if(!user.isConfirmed){
             user.isConfirmed=true;
@@ -217,6 +250,53 @@ module.exports.postOTP=(req,res,next)=>{
         if(typeof saved!=='undefined')
         {
             res.redirect('/login');
+        }
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.getReseter=(req,res,next)=>{
+    res.render('auth/reseter',{
+        title:'Token',
+        isLoggedIn:req.session.isLoggedIn||false,
+        csrfToken:req.csrfToken(),
+        errors:[]      
+    })
+}
+
+module.exports.postReseter=(req,res,next)=>{
+    checkEmailAndUsername(req.body.otp)
+    .then(user=>{
+        if(user==='unsuccessful'){
+            return res.render('auth/reseter',{
+                title:'Token',
+                isLoggedIn:req.session.isLoggedIn||false,
+                csrfToken:req.csrfToken(),
+                errors:[{msg:'E-mail Or Username Incorrect'}]
+            })
+        }
+        else{
+            const token=crypto.randomBytes(32).toString('hex');
+            user[0].resetToken=token;
+            user[0].resetExp=Date.now()+3600000;
+            return user[0].save();
+        }
+    })
+    .then(saved=>{
+        if(typeof saved!=='undefined'){
+            res.redirect('/');
+            sgMail.send({
+                to:saved.email,
+                from:'nodejsappdevops@gmail.com',
+                subject:'Password Reset',
+                html:`
+                    <h2>You have requested a password request please <a href="${process.env.WEBSITE_ROOT}/reset-pwd/${saved.resetToken}">click here </a>to go to the reset link</h2>
+                `
+            })
+            .then(()=>{console.log("sent to "+saved.email);})
+            .catch(err=>{console.log(err);})
         }
     })
     .catch(err=>{

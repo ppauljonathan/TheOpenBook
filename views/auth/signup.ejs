@@ -2,7 +2,7 @@
 <%-include('../includes/header')%>
 <%-include('../includes/navbar',{title,title:isLoggedIn,isLoggedIn})%>
 <main class="main">
-    <form class="centered signup"action="<%if(title==='Signup'){%>/signup<%}else if(title==='Reset Password'){%>/reset-pwd<%}%>" method="post">
+    <form class="centered signup"action="<%if(title==='Signup'){%>/signup<%}else if(title==='Reset Password'){%>/reset-pwd/<%=resetToken%><%}%>" method="post">
         <%if(title==='Signup'){%>
         <label class="email-label" for="email">E-mail</label>
         <input name="email" class="signup-email"type="text">

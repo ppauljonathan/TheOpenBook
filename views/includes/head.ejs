@@ -24,7 +24,10 @@
     ){%>
         <link rel="stylesheet" href="/css/singlePost.css"> 
     <%}%>
-    <%if(title==='OTP'){%>
+    <%if(
+        title==='OTP'||
+        title==='Token'
+    ){%>
         <link rel="stylesheet" href="/css/otp.css">
     <%}%>
 </head>
