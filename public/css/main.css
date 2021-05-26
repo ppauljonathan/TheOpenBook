@@ -89,6 +89,8 @@ body{
 }
 
 .errorMsg{
+    width: fit-content;
+    height: fit-content;
     position: absolute;
     top: 20%;
     left: 15%;
