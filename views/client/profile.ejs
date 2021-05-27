@@ -4,6 +4,20 @@
 <main class="main">
     <div class="wrapper">
         <p class="heading">Username: <%=user.username%></p>
+        <p class="heading" style="font-size: large; padding: unset;">
+            NOTE TO USER :
+        </p>
+        <p class="heading" style="font-size: medium; padding: unset;">
+            <br>
+            > Please make sure that your email is confirmed before creating a post otherwise your account will be deleted<br>
+            > Posts will be automatically deleted after one week<br>
+            > Source code for this project <a href="https://github.com/ppauljonathan/TheOpenBook" style="width: fit-content; height: fit-content; color: rgb(128, 128, 250);">&nbsp;here</a><br>
+            > For bug reports and feature requests please email me at nodejsappdevops@gmail.com <br>
+        </p>
+        <br>
+        <p class="heading">
+            Your Posts
+        </p>
         <%for(let i=0;i<user.posts.length;i++){%>
             <a href="/post/<%=user.posts[i]._id%>" class="profile-post"><%=user.posts[i].heading%></a>
         <%}%>
