@@ -30,7 +30,7 @@ module.exports.postLogin=(req,res,next)=>{
         if(data==='unsuccessful'){
             return res.render('auth/login',{
                 title:'Login',
-                errors:[{msg:'E-mail Or Username Incorrect'}],
+                errors:[{msg:'E-mail Or Username Incorrect Or Your Account May Have Been Deleted Due To Inactivity'}],
                 isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken()
             })
@@ -171,7 +171,7 @@ module.exports.postReset=(req,res,next)=>{
         if(data==='unsuccessful'){
             return res.render('auth/signup',{
                 title:'Reset Password',
-                errors:[{msg:'Email Or Username Incorrect'}],
+                errors:[{msg:'E-mail Or Username Incorrect Or Your Account May Have Been Deleted Due To Inactivity'}],
                 isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken(),
                 resetToken:req.params.token
@@ -274,7 +274,7 @@ module.exports.postReseter=(req,res,next)=>{
                 title:'Token',
                 isLoggedIn:req.session.isLoggedIn||false,
                 csrfToken:req.csrfToken(),
-                errors:[{msg:'E-mail Or Username Incorrect'}]
+                errors:[{msg:'E-mail Or Username Incorrect Or Your Account May Have Been Deleted Due To Inactivity'}]
             })
         }
         else{
@@ -299,6 +299,19 @@ module.exports.postReseter=(req,res,next)=>{
             .then(()=>{console.log("sent to "+saved.email);})
             .catch(err=>{console.log(err);})
         }
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.postDeleteUser=(req,res,next)=>{
+    if(req.session.user.toString()!==req.params.id.toString()){
+        return res.redirect('/');
+    }
+    User.findByIdAndDelete(req.params.id)
+    .then(done=>{
+        res.redirect('/login');
     })
     .catch(err=>{
         next(err);

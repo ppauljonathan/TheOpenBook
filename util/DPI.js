@@ -1,6 +1,3 @@
-const {unlink}=require('fs');
-const {join}=require('path');
-
 const cloudinary=require('cloudinary').v2;
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,

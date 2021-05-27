@@ -23,6 +23,9 @@ const userSchema=new Schema({
     resetToken:String,
     resetExp:{
         type:Date
+    },
+    lastSeen:{
+        type:Date
     }
 });
 

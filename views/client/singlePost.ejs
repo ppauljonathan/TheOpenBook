@@ -15,8 +15,14 @@
             </form>
         <%}%>
         <div class="heading"><%=post.heading%></div>
-        <div class="post-authour">By <%=post.creator.username%></div>
-        <%if(typeof user!=="undefined"&&user.toString()===post.creator._id.toString()&&isLoggedIn){%>
+        <div class="post-authour">By 
+            <%if(post.creator===null){%>
+                anonymous
+            <%}else{%>
+                <%=post.creator.username%>
+            <%}%>
+        </div>
+        <%if(post.creator!==null&&typeof user!=="undefined"&&user.toString()===post.creator._id.toString()&&isLoggedIn){%>
             <form action="/delete-post/<%=post._id%>" method="post" class="delete-post-form">
                 <button class="button delete-post" type="submit">Delete</button>
                 <input type="hidden" name="_csrf" value="<%=csrfToken%>">

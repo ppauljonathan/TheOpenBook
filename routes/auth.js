@@ -69,4 +69,5 @@ router.post('/otp',authControllers.postOTP);
 router.get('/reseter',remAuth,authControllers.getReseter);
 router.post('/reseter',remAuth,authControllers.postReseter);
 
+router.post('/delete-user/:id',authControllers.postDeleteUser);
 module.exports=router;

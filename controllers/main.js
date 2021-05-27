@@ -1,4 +1,3 @@
-const os=require('os');
 const {promises}=require('fs');
 
 const Post=require('../models/post');
@@ -16,7 +15,6 @@ cloudinary.config({
 })
 
 const ITEMS_PER_PAGE=3;
-const OSTYPE=os.type();
 
 module.exports.main=(req,res,next)=>{
     const pageNo=req.query.page||1;
@@ -56,13 +54,11 @@ module.exports.getCreate=(req,res,next)=>{
 }
 
 module.exports.postCreate=(req,res,next)=>{
-    const oldDate=new Date();
-    const newDate=new Date(oldDate.getTime()+60000*60*24*7);
     const post={
         heading:req.body.heading,
         content:req.body.content,
         creator:req.session.user,
-        expires:newDate,
+        expires:Date.now()+1000*60*60*24*7,
         imageUrl:{}
     };
     let postId;
@@ -155,7 +151,8 @@ module.exports.getProfile=(req,res,next)=>{
         return res.render('client/profile',{
             title:'Profile',
             isLoggedIn:req.session.isLoggedIn||false,
-            user:user
+            user:user,
+            csrfToken:req.csrfToken()
         })
     })
     .catch(err=>{
