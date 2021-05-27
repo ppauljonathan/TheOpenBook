@@ -293,6 +293,7 @@ module.exports.postReseter=(req,res,next)=>{
                 subject:'Password Reset',
                 html:`
                     <h2>You have requested a password request please <a href="${process.env.WEBSITE_ROOT}/reset-pwd/${saved.resetToken}">click here </a>to go to the reset link</h2>
+                    <p>this link is only active for 60 minutes</p>
                 `
             })
             .then(()=>{console.log("sent to "+saved.email);})
