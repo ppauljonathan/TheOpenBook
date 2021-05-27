@@ -12,6 +12,7 @@ SENDGRID_API_KEY=<api key for your sendgrid user>
 CLOUDINARY_CLOUD_NAME=<cloudinary>
 CLOUDINARY_API_KEY=<api-key>
 CLOUDINARY_API_SECRET=<api-secret>
+WEBSITE_ROOT=<the complete url of / ex https://appname.servedat.com/>
 ```
 Run : 
 
