@@ -286,7 +286,12 @@ module.exports.postReseter=(req,res,next)=>{
     })
     .then(saved=>{
         if(typeof saved!=='undefined'){
-            res.redirect('/');
+            res.render('auth/reseter',{
+                title:'Token',
+                isLoggedIn:req.session.isLoggedIn||false,
+                csrfToken:req.csrfToken(),
+                errors:[{msg:'A Reset Link Has Been Sent To Your Email'}]
+            })
             sgMail.send({
                 to:saved.email,
                 from:'nodejsappdevops@gmail.com',
