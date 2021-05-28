@@ -3,8 +3,9 @@ const {body}=require('express-validator');
 
 const authControllers=require('../controllers/auth');
 const {remAuth,isAuth}=require('../middleware/isAuth');
+const {lastSeenUpdate:LSU}=require('../middleware/lastSeenUpdate');
 
-router.get('/login',remAuth,authControllers.getLogin);
+router.get('/login',LSU,remAuth,authControllers.getLogin);
 router.post(
     '/login',
     [
@@ -16,7 +17,7 @@ router.post(
     authControllers.postLogin
 );
 
-router.get('/signup',remAuth,authControllers.getSignup);
+router.get('/signup',LSU,remAuth,authControllers.getSignup);
 router.post(
     '/signup',
     [
@@ -42,7 +43,7 @@ router.post(
     authControllers.postSignup
 );
 
-router.get('/reset-pwd/:token',remAuth,authControllers.getReset);
+router.get('/reset-pwd/:token',LSU,remAuth,authControllers.getReset);
 router.post(
     '/reset-pwd/:token',
     [
@@ -66,8 +67,8 @@ router.get('/otp',authControllers.getOTP);
 router.post('/otp',authControllers.postOTP);
 
 
-router.get('/reseter',remAuth,authControllers.getReseter);
-router.post('/reseter',remAuth,authControllers.postReseter);
+router.get('/reseter',LSU,remAuth,authControllers.getReseter);
+router.post('/reseter',LSU,remAuth,authControllers.postReseter);
 
-router.post('/delete-user/:id',authControllers.postDeleteUser);
+router.post('/delete-user/:id',isAuth,authControllers.postDeleteUser);
 module.exports=router;

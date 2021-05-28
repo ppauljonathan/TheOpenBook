@@ -5,9 +5,10 @@ const mainController=require('../controllers/main');
 const {isAuth}=require('../middleware/isAuth');
 const {deleteOldPosts:DOP,deleteOldUsers:DOU}=require('../middleware/deleteOldPosts');
 const {isConf}=require('../middleware/isConf');
+const {lastSeenUpdate:LSU}=require('../middleware/lastSeenUpdate');
 
 
-router.get('/',DOU,DOP,mainController.main);
+router.get('/',DOU,DOP,LSU,mainController.main);
 
 router.get('/post/:postId',mainController.getSinglePost)
 
