@@ -22,6 +22,7 @@
                 <%=post.creator.username%>
             <%}%>
         </div>
+        <a class="button comments" href="<%=url%>/comments">Comments</a>
         <%if(post.creator!==null&&typeof user!=="undefined"&&user.toString()===post.creator._id.toString()&&isLoggedIn){%>
             <form action="/delete-post/<%=post._id%>" method="post" class="delete-post-form">
                 <button class="button delete-post" type="submit">Delete</button>

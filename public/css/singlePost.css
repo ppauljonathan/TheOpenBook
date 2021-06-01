@@ -101,3 +101,9 @@
     width:auto;
     height: 30vh;
 }
+
+.comments{
+    position: absolute;
+    top:15%;
+    left:45%;
+}

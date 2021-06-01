@@ -36,7 +36,11 @@ const postSchema=new Schema({
     },
     expires:{
         type:Date
-    }
+    },
+    comments:[{
+        poster:String,
+        content:String
+    }]
 });
 
 module.exports=mongoose.model('Post',postSchema);

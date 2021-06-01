@@ -135,6 +135,7 @@ module.exports.getSinglePost=(req,res,next)=>{
             isLoggedIn:req.session.isLoggedIn||false,
             user:req.session.user,
             userToPost:userToPost,
+            url:req.url,
             csrfToken:req.csrfToken()
         })
     })
@@ -291,6 +292,63 @@ module.exports.postDownvote=(req,res,next)=>{
     })
     .then(saved=>{
         res.redirect('/post/'+req.params.postId);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.getComments=(req,res,next)=>{
+    let comments=[];
+    Post.findById(req.params.postId)
+    .then(post=>{
+        comments.push(...post.comments);
+        return User.findById(req.session.user)
+    })
+    .then(user=>{
+        if(user===null){
+            res.render('client/comments',{
+                title:'Comments',
+                isLoggedIn:req.session.isLoggedIn,
+                user:false,
+                comments:comments,
+                action:req.url,
+                csrfToken:req.csrfToken()
+            })
+        }  
+        else{
+            res.render('client/comments',{
+                title:'Comments',
+                isLoggedIn:req.session.isLoggedIn,
+                user:user.username,
+                comments:comments,
+                action:req.url,
+                csrfToken:req.csrfToken()
+            })
+        }
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.postComments=(req,res,next)=>{
+    let poster;
+    User.findById(req.session.user)
+    .then(user=>{
+        poster=user.username;
+        return Post.findById(req.params.postId);
+    })
+    .then(post=>{
+        const comment={
+            content:req.body.comment,
+            poster:poster
+        }
+        post.comments.unshift(comment);
+        return post.save();
+    })
+    .then(saved=>{
+        res.redirect(req.url);
     })
     .catch(err=>{
         next(err);

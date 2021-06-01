@@ -1,0 +1,25 @@
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
+<main class="main">
+    <%if(isLoggedIn){%>
+    <form action="<%=action%>" method="post" class="comments-form">
+        <textarea class="comment-field" name="comment" placeholder="hey <%=user%> add a comment! tell others how you feel about this post"></textarea>
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+        <button type="submit" class="button submit">Post</button>
+        <button type="reset" class="button reset">Rewrite</button>
+    </form>
+    <%}else{%>
+        <h3>Please login to leave a comment</h3>
+    <%}%>
+    <br>
+    <h2><%=comments.length%> Comments</h2>
+    <%for(let i=0;i<comments.length;i++){%>
+        <div class="comment">
+            <div class="creator"><%=comments[i].poster%> :</div>
+            <br>
+            <div class="content"><%=comments[i].content%></div>
+        </div>
+    <%}%>
+</main>
+<%-include('../includes/tail')%>

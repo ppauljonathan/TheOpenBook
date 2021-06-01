@@ -1,0 +1,47 @@
+.comments-form{
+    border: 1px solid white;
+    border-radius: 5px;
+    position: relative;
+    margin: auto;
+    width: 90vw;
+    height: 10vh;
+}
+
+.comment-field{
+    position: relative;
+    top:2%;
+    left: 1%;
+    width: 90%;
+    height: 90%;
+    resize: none;
+}
+
+.submit{
+    font-size: 2vh;
+    position: absolute;
+    top:0.5vh;
+    right: 1%;
+}
+
+.reset{
+    font-size: 2vh;
+    position: absolute;
+    top: 5.5vh;
+    right: 1%;
+}
+
+.comment{
+    position: relative;
+    width: 90vw;
+    padding: 2%;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.creator,.content{
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    top:1%;
+    left: 1%;
+}

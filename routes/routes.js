@@ -12,6 +12,9 @@ router.get('/',DOU,DOP,LSU,mainController.main);
 
 router.get('/post/:postId',mainController.getSinglePost)
 
+router.get('/post/:postId/comments',mainController.getComments);
+router.post('/post/:postId/comments',isAuth,mainController.postComments);
+
 router.get('/create',isAuth,isConf,mainController.getCreate);
 router.post(
     '/create',
