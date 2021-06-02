@@ -14,8 +14,8 @@
 
         <input type="hidden" name="_csrf" value="<%=csrfToken%>">
     </form>
-    <p class="already-not-message">Not a member? &nbsp;<a href="/signup">Signup</a></p>
-    <p class="already-not-message">Forgot Password? &nbsp;<a href="/reseter">Reset</a></p>
+    <p class="already-not-message">Not a member? &nbsp;<a href="/signup" style="width: fit-content; height: fit-content; color: rgb(128, 128, 250);">Signup</a></p>
+    <p class="already-not-message">Forgot Password? &nbsp;<a href="/reseter" style="width: fit-content; height: fit-content; color: rgb(128, 128, 250);">Reset</a></p>
     <%if(errors.length!=0){%>
         <p class="errorMsg">ERR:&nbsp;<%=errors[0].msg%></p>
     <%}%>

@@ -297,7 +297,7 @@ module.exports.postReseter=(req,res,next)=>{
                 from:'nodejsappdevops@gmail.com',
                 subject:'Password Reset',
                 html:`
-                    <h2>You have requested a password request please <a href="${process.env.WEBSITE_ROOT}/reset-pwd/${saved.resetToken}">click here </a>to go to the reset link</h2>
+                    <h2>You have requested a password request please <a href="${process.env.WEBSITE_ROOT}/reset-pwd/${saved.resetToken}" style="width: fit-content; height: fit-content; color: rgb(128, 128, 250);">click here </a>to go to the reset link</h2>
                     <p>this link is only active for 60 minutes</p>
                 `
             })
