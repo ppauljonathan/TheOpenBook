@@ -13,6 +13,8 @@ cloudinary.config({
     enhance_image_tag:true,
     static_file_support:true
 })
+const sgMail=require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const ITEMS_PER_PAGE=3;
 
@@ -349,6 +351,37 @@ module.exports.postComments=(req,res,next)=>{
     })
     .then(saved=>{
         res.redirect(req.url);
+    })
+    .catch(err=>{
+        next(err);
+    })
+}
+
+module.exports.getEmail=(req,res,next)=>{
+    res.render('client/issues',{
+        title:'Bug Report or Feature Request',
+        isLoggedIn:req.session.isLoggedIn,
+        csrfToken:req.csrfToken()
+    })
+}
+
+module.exports.postEmail=(req,res,next)=>{
+    User
+    .findById(req.session.user)
+    .then(user=>{
+        return sgMail.send({
+            to:'nodejsappdevops@gmail.com',
+            from:'nodejsappdevops@gmail.com',
+            subject:'Issues',
+            html:`
+                <p>${req.body.issue}</p>
+                <br>
+                <p>-${user.username}</p>
+            `
+        })
+    })
+    .then(sent=>{
+        res.redirect('/profile');
     })
     .catch(err=>{
         next(err);

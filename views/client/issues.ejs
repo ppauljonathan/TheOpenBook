@@ -1,0 +1,11 @@
+<%-include('../includes/head',{title:title})%>
+<%-include('../includes/header')%>
+<%-include('../includes/navbar',{title:title,isLoggedIn:isLoggedIn})%>
+<main class="main">
+    <form action="/issues" method="post" class="form centered">
+        <textarea name="issue" id="issue" cols="30" rows="10" placeholder="Please tell us what best describes your issue"></textarea>
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>">
+        <button type="submit" class="button" id="issueSub">Submit</button>
+    </form>
+</main>
+<%-include('../includes/tail')%>

@@ -9,8 +9,13 @@ module.exports.lastSeenUpdate=(req,res,next)=>{
         User
         .findById(req.session.user)
         .then(user=>{
-            user.lastSeen=Date.now()+1000*60*60*24*7*4;
-            return user.save();
+            if(user==null){
+                return null;
+            }
+            else{
+                user.lastSeen=Date.now()+1000*60*60*24*7*4;
+                return user.save();
+            }
         })
         .then(done=>{
             next();

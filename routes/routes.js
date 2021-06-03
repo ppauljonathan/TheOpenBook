@@ -45,4 +45,7 @@ router.post('/downvote/:postId',isAuth,mainController.postDownvote);
 
 router.get('/profile',isAuth,mainController.getProfile);
 
+router.get('/issues',isAuth,mainController.getEmail);
+router.post('/issues',isAuth,mainController.postEmail);
+
 module.exports=router;

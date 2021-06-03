@@ -163,3 +163,18 @@
     left:40%;
     top:80%;
 }
+
+#issue{
+    position: relative;
+    width: 90%;
+    height: 80%;
+    resize: none;
+    top:5%;
+    left: 5%;
+}
+
+#issueSub{
+    position: absolute;
+    top:90%;
+    left: 5%;
+}
